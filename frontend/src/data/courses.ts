@@ -27,6 +27,14 @@ export type Course = {
 
 export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
 
+// QA-only: videos live in a private blob container, so URLs carry a read-only
+// SAS token supplied at build time (never committed — see VITE_QA_VIDEO_SAS
+// in the deploy-frontend-qa workflow). Replace with per-request signed URLs
+// from the Video service once playback auth exists (Phase 2).
+const QA_VIDEO_BASE = "https://stlearnlyqa4127.blob.core.windows.net/videos"
+const QA_VIDEO_SAS = import.meta.env.VITE_QA_VIDEO_SAS ?? ""
+const qaVideo = (blobName: string) => `${QA_VIDEO_BASE}/${blobName}${QA_VIDEO_SAS}`
+
 export const courses: Course[] = [
   {
     id: "microsoft-azure-basics",
@@ -50,32 +58,32 @@ export const courses: Course[] = [
       {
         title: "Getting Started",
         lectures: [
-          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 8 },
-          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 15 },
-          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 14 },
+          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 32, videoUrl: qaVideo("azb-01-intro.mp4") },
+          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 50, videoUrl: qaVideo("azb-02-cloud-fundamentals.mp4") },
+          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 31, videoUrl: qaVideo("azb-03-getting-started.mp4") },
         ],
       },
       {
         title: "Core Azure Resources & Compute",
         lectures: [
-          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 16 },
-          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 28 },
+          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 25, videoUrl: qaVideo("azb-04-resources-rg-arm.mp4") },
+          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 44, videoUrl: qaVideo("azb-05-vms-jenkins.mp4") },
         ],
       },
       {
         title: "Azure Networking",
         lectures: [
-          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 18 },
-          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 32 },
-          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 25 },
-          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 20 },
+          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 19, videoUrl: qaVideo("azb-06-vnet-fundamentals.mp4") },
+          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 39, videoUrl: qaVideo("azb-07-networking-basic-advanced.mp4") },
+          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 38, videoUrl: qaVideo("azb-08-networking-project.mp4") },
+          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 34, videoUrl: qaVideo("azb-09-networking-interview.mp4") },
         ],
       },
       {
         title: "Storage & Automation",
         lectures: [
-          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 22 },
-          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 19 },
+          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 24, videoUrl: qaVideo("azb-10-storage-services.mp4") },
+          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 29, videoUrl: qaVideo("azb-11-cli-automation.mp4") },
         ],
       },
     ],

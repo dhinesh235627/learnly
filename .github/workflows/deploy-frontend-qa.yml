@@ -26,6 +26,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_QA_VIDEO_SAS: ${{ secrets.QA_VIDEO_SAS }}
 
       - name: Prune to production dependencies
         run: npm prune --omit=dev
