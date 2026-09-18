@@ -7,8 +7,8 @@ export const notifications = [
   },
   {
     id: "n2",
-    text: "Reminder: you're 42% through Azure Fundamentals — keep your streak going.",
-    courseId: "microsoft-azure-fundamentals",
+    text: "Reminder: you're 42% through Microsoft Azure Basics — keep your streak going.",
+    courseId: "microsoft-azure-basics",
     time: "1d ago",
   },
   {

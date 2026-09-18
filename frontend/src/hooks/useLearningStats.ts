@@ -14,8 +14,8 @@ function seedOnce() {
   try {
     if (localStorage.getItem(COMPLETED_KEY) === null) {
       const seed = [
-        "az-cloud-models",
-        "az-capex-opex",
+        "azb-01-intro",
+        "azb-02-cloud-fundamentals",
         "aws-shared-responsibility",
         "aws-iam-policies",
         "aws-mfa",

@@ -29,9 +29,9 @@ export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
 
 export const courses: Course[] = [
   {
-    id: "microsoft-azure-fundamentals",
-    title: "Microsoft Learn: Azure Fundamentals (AZ-900) Complete Guide",
-    instructor: "Rehan Chowdhury",
+    id: "microsoft-azure-basics",
+    title: "Microsoft Azure Basics",
+    instructor: "Vishwaanth",
     price: 549,
     originalPrice: 3299,
     level: "Beginner",
@@ -39,43 +39,43 @@ export const courses: Course[] = [
     bestseller: true,
     color: "#0078D4",
     description:
-      "A practitioner-taught walkthrough of core Azure services, pricing, and governance — mapped directly to the AZ-900 exam guide.",
+      "A hands-on introduction to Microsoft Azure — cloud fundamentals, core resources, virtual machines, networking, storage, and CLI automation — built as a practical roadmap toward AZ-900 and AZ-104.",
     whatYouLearn: [
-      "Explain core Azure architectural components",
-      "Describe Azure compute, networking, and storage services",
-      "Understand Azure pricing, SLAs, and lifecycles",
-      "Apply governance, privacy, and compliance features",
+      "Explain core cloud computing concepts and Azure's global infrastructure",
+      "Deploy and manage Azure resources, resource groups, and virtual machines (including running Jenkins on an Azure VM)",
+      "Design Azure Virtual Networks with firewalls, NSGs, and Bastion for secure connectivity",
+      "Work with Azure Storage services (Blob, File, Table, Queue) and automate resources with the Azure CLI",
     ],
     curriculum: [
       {
-        title: "Cloud Concepts",
+        title: "Getting Started",
         lectures: [
-          { id: "az-cloud-models", title: "Public, Private & Hybrid Cloud Models", minutes: 11 },
-          { id: "az-capex-opex", title: "CapEx vs. OpEx and the Azure Pricing Model", minutes: 9 },
-          { id: "az-scalability", title: "High Availability, Scalability & Elasticity", minutes: 10 },
+          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 8 },
+          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 15 },
+          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 14 },
         ],
       },
       {
-        title: "Azure Architecture & Services",
+        title: "Core Azure Resources & Compute",
         lectures: [
-          { id: "az-regions", title: "Regions, Region Pairs & Availability Zones", minutes: 12 },
-          { id: "az-resource-manager", title: "Azure Resource Manager & Resource Groups", minutes: 14 },
-          { id: "az-compute", title: "Compute Options: VMs, Containers & Functions", minutes: 16 },
-          { id: "az-storage", title: "Storage Accounts & Data Redundancy", minutes: 13 },
+          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 16 },
+          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 28 },
         ],
       },
       {
-        title: "Azure Management & Governance",
+        title: "Azure Networking",
         lectures: [
-          { id: "az-cost-mgmt", title: "Azure Cost Management & Budgets", minutes: 10 },
-          { id: "az-policy", title: "Azure Policy & Resource Locks", minutes: 9 },
-          { id: "az-rbac", title: "Role-Based Access Control (RBAC)", minutes: 11 },
+          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 18 },
+          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 32 },
+          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 25 },
+          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 20 },
         ],
       },
       {
-        title: "AZ-900 Practice Exam",
+        title: "Storage & Automation",
         lectures: [
-          { id: "az-practice-exam", title: "Practice Exam Walkthrough", minutes: 24 },
+          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 22 },
+          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 19 },
         ],
       },
     ],
