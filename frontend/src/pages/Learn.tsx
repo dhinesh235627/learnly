@@ -5,6 +5,7 @@ import StarRating from "../components/StarRating"
 import { adjacentLecture, allLectures, courseProgress, courses, findLecture } from "../data/courses"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
+import { useCourseReminder } from "../hooks/useCourseReminder"
 import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
 import { useLectureNotes } from "../hooks/useLectureNotes"
@@ -36,6 +37,7 @@ export default function Learn() {
   const { review, submit } = useCourseReview(courseId ?? "")
   const { text: noteText, setText: setNoteText } = useLectureNotes(lectureId ?? "")
   const { questions, ask } = useLectureQuestions(lectureId ?? "")
+  const { reminder, permission, setReminder, clearReminder } = useCourseReminder(courseId ?? "", course?.title ?? "")
 
   const lecture = course && lectureId ? findLecture(course, lectureId) : undefined
 
@@ -74,6 +76,21 @@ export default function Learn() {
     if (!questionDraft.trim()) return
     ask(questionDraft)
     setQuestionDraft("")
+  }
+
+  function setQuickReminder(hoursFromNow: number) {
+    const at = new Date(Date.now() + hoursFromNow * 60 * 60 * 1000)
+    setReminder(at.toISOString())
+  }
+
+  function formatReminder(atISO: string) {
+    return new Date(atISO).toLocaleString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    })
   }
 
   function share() {
@@ -412,7 +429,30 @@ export default function Learn() {
                   </p>
                 </div>
               )}
-              {tab === "Announcements" && <p>{course.instructor} hasn't posted any announcements yet.</p>}
+              {tab === "Announcements" &&
+                (course.announcements?.length ? (
+                  <div className="flex flex-col gap-5">
+                    {course.announcements.map((a) => (
+                      <div key={a.date} className="flex gap-3">
+                        <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                          {course.instructor
+                            .split(" ")
+                            .map((w) => w[0])
+                            .join("")
+                            .slice(0, 2)}
+                        </span>
+                        <div>
+                          <p className="text-[13.5px] text-ink">{a.text}</p>
+                          <p className="mt-1 text-[12px] text-ink-faint">
+                            {a.date} · {course.instructor}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>{course.instructor} hasn't posted any announcements yet.</p>
+                ))}
               {tab === "Reviews" &&
                 (review ? (
                   <div className="flex gap-3">
@@ -438,7 +478,52 @@ export default function Learn() {
                   </p>
                 ))}
               {tab === "Learning tools" && (
-                <p>No supplementary exercise files or flashcards for this lecture yet.</p>
+                <div>
+                  <p className="text-[13.5px] font-semibold text-ink">Remind me to keep learning</p>
+                  <p className="mt-1 text-[13px] text-ink-faint">
+                    We'll send a browser notification for this course while Learnly is open.
+                  </p>
+
+                  {reminder ? (
+                    <div className="mt-3 flex items-center gap-3 rounded-md border border-brand bg-brand-soft px-3.5 py-2.5">
+                      <span className="text-[13.5px] text-brand">
+                        🔔 Reminder set for <span className="font-semibold">{formatReminder(reminder.atISO)}</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={clearReminder}
+                        className="ml-auto text-[12.5px] font-semibold text-brand underline"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {[
+                        { label: "In 1 hour", hours: 1 },
+                        { label: "Tomorrow", hours: 24 },
+                        { label: "In 3 days", hours: 72 },
+                        { label: "In 1 week", hours: 168 },
+                      ].map((o) => (
+                        <button
+                          key={o.label}
+                          type="button"
+                          onClick={() => setQuickReminder(o.hours)}
+                          className="rounded-md border border-line px-3.5 py-2 text-[13px] font-semibold text-ink transition hover:border-ink-soft"
+                        >
+                          {o.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {permission === "denied" && (
+                    <p className="mt-3 text-[12px] text-ink-faint">
+                      Notifications are blocked in this browser — the reminder time is still saved, but you
+                      won't get a popup. Enable notifications for this site to change that.
+                    </p>
+                  )}
+                </div>
               )}
             </div>
           </div>

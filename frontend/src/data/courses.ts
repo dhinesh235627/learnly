@@ -26,6 +26,7 @@ export type Course = {
   description: string
   whatYouLearn: string[]
   curriculum: Section[]
+  announcements?: { date: string; text: string }[]
 }
 
 export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
@@ -93,6 +94,12 @@ export const courses: Course[] = [
         ],
       },
     ],
+    announcements: [
+      {
+        date: "2026-09-10",
+        text: "Welcome to Microsoft Azure Basics! If you're following the AZ-900/AZ-104 roadmap, I'd recommend working through the networking section lectures back-to-back — they build directly on each other.",
+      },
+    ],
   },
   {
     id: "aws-solutions-architect",
@@ -147,6 +154,12 @@ export const courses: Course[] = [
         ],
       },
     ],
+    announcements: [
+      {
+        date: "2026-09-15",
+        text: "New lectures on Elastic Beanstalk and Secrets Manager are now live — check the updated Course content tab.",
+      },
+    ],
   },
   {
     id: "gcp-associate-cloud-engineer",
@@ -198,6 +211,12 @@ export const courses: Course[] = [
         ],
       },
     ],
+    announcements: [
+      {
+        date: "2026-09-05",
+        text: "Thanks for enrolling in the Associate Cloud Engineer track — I'm putting together additional VPC networking labs, stay tuned for an update.",
+      },
+    ],
   },
   {
     id: "sap-s4hana-fundamentals",
@@ -246,6 +265,12 @@ export const courses: Course[] = [
         lectures: [
           { id: "sap-case-study", title: "End-to-End Case Study Walkthrough", minutes: 20 },
         ],
+      },
+    ],
+    announcements: [
+      {
+        date: "2026-08-28",
+        text: "Welcome! Quick note: the case study in the final section assumes you're already comfortable navigating the SAP Fiori launchpad from Section 1.",
       },
     ],
   },
