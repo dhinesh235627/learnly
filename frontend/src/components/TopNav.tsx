@@ -3,8 +3,14 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import AnimatedPopover from "./AnimatedPopover"
 import { categories } from "../data/courses"
 import { notifications } from "../data/notifications"
+import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useIdSet } from "../hooks/useIdSet"
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts.slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+}
 
 export default function TopNav() {
   const navigate = useNavigate()
@@ -13,9 +19,16 @@ export default function TopNav() {
   const [openNotif, setOpenNotif] = useState(false)
   const [openAvatar, setOpenAvatar] = useState(false)
   const cart = useIdSet("learnly:cart")
+  const { user, logout } = useAuth()
 
   const notifRef = useClickOutside<HTMLDivElement>(() => setOpenNotif(false))
   const avatarRef = useClickOutside<HTMLDivElement>(() => setOpenAvatar(false))
+
+  async function handleLogout() {
+    setOpenAvatar(false)
+    await logout()
+    navigate("/")
+  }
 
   const activeCategory = params.get("category")
 
@@ -112,53 +125,66 @@ export default function TopNav() {
             </AnimatedPopover>
           </div>
 
-          <div className="relative" ref={avatarRef}>
-            <button
-              type="button"
-              aria-label="Account menu"
-              onClick={() => {
-                setOpenAvatar((v) => !v)
-                setOpenNotif(false)
-              }}
-              className="grid h-9 w-9 place-items-center rounded-full bg-brand-soft font-display text-[13px] font-bold text-brand"
-            >
-              DH
-            </button>
-            <AnimatedPopover
-              open={openAvatar}
-              className="absolute right-0 mt-2 w-56 origin-top-right rounded-xl border border-line bg-surface p-2 shadow-lg"
-            >
-              <div className="px-2.5 py-2">
-                <p className="text-[13.5px] font-bold text-ink">Dhinesh</p>
-                <p className="text-[12px] text-ink-faint">dhinesh.ad@aivisualz.com</p>
-              </div>
-              <div className="my-1 h-px bg-line" />
-              {[
-                { label: "My learning", to: "/home" },
-                { label: "Wishlist", to: "/wishlist" },
-                { label: "Cart", to: "/cart" },
-                { label: "Public profile", to: "/profile" },
-                { label: "Account settings", to: "/profile" },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  onClick={() => setOpenAvatar(false)}
-                  className="block rounded-lg px-2.5 py-2 text-[13.5px] text-ink-soft hover:bg-paper hover:text-ink"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="my-1 h-px bg-line" />
-              <Link
-                to="/"
-                onClick={() => setOpenAvatar(false)}
-                className="block rounded-lg px-2.5 py-2 text-[13.5px] font-semibold text-ink-soft hover:bg-paper hover:text-ink"
+          {user ? (
+            <div className="relative" ref={avatarRef}>
+              <button
+                type="button"
+                aria-label="Account menu"
+                onClick={() => {
+                  setOpenAvatar((v) => !v)
+                  setOpenNotif(false)
+                }}
+                className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-brand-soft font-display text-[13px] font-bold text-brand"
               >
-                Log out
-              </Link>
-            </AnimatedPopover>
-          </div>
+                {user.picture ? (
+                  <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  initials(user.name)
+                )}
+              </button>
+              <AnimatedPopover
+                open={openAvatar}
+                className="absolute right-0 mt-2 w-56 origin-top-right rounded-xl border border-line bg-surface p-2 shadow-lg"
+              >
+                <div className="px-2.5 py-2">
+                  <p className="text-[13.5px] font-bold text-ink">{user.name}</p>
+                  <p className="text-[12px] text-ink-faint">{user.email}</p>
+                </div>
+                <div className="my-1 h-px bg-line" />
+                {[
+                  { label: "My learning", to: "/home" },
+                  { label: "Wishlist", to: "/wishlist" },
+                  { label: "Cart", to: "/cart" },
+                  { label: "Public profile", to: "/profile" },
+                  { label: "Account settings", to: "/profile" },
+                ].map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    onClick={() => setOpenAvatar(false)}
+                    className="block rounded-lg px-2.5 py-2 text-[13.5px] text-ink-soft hover:bg-paper hover:text-ink"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="my-1 h-px bg-line" />
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="block w-full rounded-lg px-2.5 py-2 text-left text-[13.5px] font-semibold text-ink-soft hover:bg-paper hover:text-ink"
+                >
+                  Log out
+                </button>
+              </AnimatedPopover>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-md bg-brand px-3.5 py-1.5 text-[13.5px] font-semibold text-white hover:bg-brand-dark"
+            >
+              Log in
+            </Link>
+          )}
         </div>
       </div>
 

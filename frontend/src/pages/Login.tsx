@@ -1,14 +1,34 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import { API_BASE } from "../lib/api"
+import { useAuth } from "../hooks/useAuth"
+
+const ERROR_MESSAGES: Record<string, string> = {
+  google_denied: "Google sign-in was cancelled.",
+  google_failed: "Something went wrong signing in with Google. Please try again.",
+}
 
 export default function Login() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const { user, loading } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const errorParam = params.get("error")
+  const errorMessage = errorParam ? ERROR_MESSAGES[errorParam] ?? "Sign-in failed. Please try again." : null
+
+  useEffect(() => {
+    if (!loading && user) navigate("/home", { replace: true })
+  }, [loading, user, navigate])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     navigate("/home")
+  }
+
+  function continueWithGoogle() {
+    window.location.href = `${API_BASE}/api/auth/google`
   }
 
   return (
@@ -36,6 +56,12 @@ export default function Login() {
           <p className="mt-1 text-[14px] text-ink-soft">
             Pick up your Azure, AWS, GCP, or SAP course right where you left off.
           </p>
+
+          {errorMessage && (
+            <p className="mt-4 rounded-md border border-line bg-paper px-3.5 py-2.5 text-[13px] text-ink-soft">
+              {errorMessage}
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
@@ -88,17 +114,18 @@ export default function Login() {
           <div className="flex flex-col gap-2.5">
             <button
               type="button"
-              onClick={() => navigate("/home")}
+              onClick={continueWithGoogle}
               className="rounded-md border border-line px-4 py-2.5 text-[14px] font-semibold text-ink transition hover:border-ink-soft"
             >
               Continue with Google
             </button>
             <button
               type="button"
-              onClick={() => navigate("/home")}
-              className="rounded-md border border-line px-4 py-2.5 text-[14px] font-semibold text-ink transition hover:border-ink-soft"
+              disabled
+              title="Coming soon"
+              className="cursor-not-allowed rounded-md border border-line px-4 py-2.5 text-[14px] font-semibold text-ink-faint"
             >
-              Continue with Microsoft
+              Continue with Microsoft (coming soon)
             </button>
           </div>
 
