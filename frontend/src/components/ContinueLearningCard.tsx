@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { nextIncompleteLecture } from "../data/courses"
 import type { Course } from "../data/courses"
 import { useIdSet } from "../hooks/useIdSet"
+import { CategoryGlyph, thumbGradient } from "./CourseThumbArt"
 
 const MotionLink = motion.create(Link)
 
@@ -19,9 +20,13 @@ export default function ContinueLearningCard({ course }: { course: Course }) {
       className="flex w-95 flex-none overflow-hidden rounded-xl border border-line bg-surface shadow-sm hover:shadow-lg"
     >
       <div
-        className="group relative flex h-26 w-40 flex-none items-center justify-center"
-        style={{ backgroundColor: course.color }}
+        className="group relative flex h-26 w-40 flex-none items-center justify-center overflow-hidden"
+        style={thumbGradient(course.color)}
       >
+        <CategoryGlyph
+          category={course.category}
+          className="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 rotate-[-8deg] text-white/25"
+        />
         <motion.span
           whileHover={{ scale: 1.08 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}

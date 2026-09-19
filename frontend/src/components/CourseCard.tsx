@@ -3,6 +3,7 @@ import { courseHours, courseProgress } from "../data/courses"
 import type { Course } from "../data/courses"
 import { useCourseRating } from "../hooks/useCourseRating"
 import { useIdSet } from "../hooks/useIdSet"
+import { CategoryGlyph, thumbGradient } from "./CourseThumbArt"
 
 function initials(title: string) {
   return title
@@ -35,11 +36,19 @@ export default function CourseCard({
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className="flex w-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-sm hover:shadow-lg"
     >
-      <div
-        className="relative flex h-32 items-center justify-center text-2xl font-bold text-white"
-        style={{ backgroundColor: course.color }}
-      >
-        {initials(course.title)}
+      <div className="relative flex h-36 items-center justify-center overflow-hidden" style={thumbGradient(course.color)}>
+        <CategoryGlyph
+          category={course.category}
+          className="pointer-events-none absolute -bottom-5 -right-5 h-32 w-32 rotate-[-8deg] text-white/25"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+
+        {course.bestseller && (
+          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded bg-amber-400 px-1.5 py-0.5 text-[10.5px] font-bold text-amber-950 shadow-sm">
+            ★ Bestseller
+          </span>
+        )}
+
         <motion.button
           type="button"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -56,6 +65,10 @@ export default function CourseCard({
         >
           {wishlisted ? "♥" : "♡"}
         </motion.button>
+
+        <span className="relative grid h-12 w-12 place-items-center rounded-full bg-white/15 text-[15px] font-bold text-white ring-1 ring-inset ring-white/40 backdrop-blur-sm">
+          {initials(course.title)}
+        </span>
       </div>
 
       <div className="flex flex-1 flex-col gap-1.5 p-4">
@@ -93,11 +106,6 @@ export default function CourseCard({
             <p className="text-[12px] text-ink-faint">
               {courseHours(course)}h total · {course.level}
             </p>
-            {course.bestseller && (
-              <span className="mt-1 inline-block w-fit rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-bold text-amber-900">
-                Bestseller
-              </span>
-            )}
             <div className="mt-1 flex items-baseline gap-2">
               <span className="font-mono text-[15px] font-bold text-ink">
                 ₹{course.price}
