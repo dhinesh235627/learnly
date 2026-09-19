@@ -3,8 +3,10 @@ import { Link, useSearchParams } from "react-router-dom"
 import Carousel from "../components/Carousel"
 import ContinueLearningCard from "../components/ContinueLearningCard"
 import CourseCard from "../components/CourseCard"
+import { CloudCircuitGlyph } from "../components/CourseThumbArt"
 import Footer from "../components/Footer"
 import PromoBanner from "../components/PromoBanner"
+import { ClockIcon, FlameIcon, PlayIcon, TrophyIcon } from "../components/StatIcons"
 import TopNav from "../components/TopNav"
 import { courseProgress, courses } from "../data/courses"
 import { useLearningStats } from "../hooks/useLearningStats"
@@ -93,58 +95,68 @@ export default function Home() {
 
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-8">
-          <div className="flex items-center gap-5">
-            <span className="grid h-16 w-16 flex-none place-items-center rounded-full bg-ink font-display text-[18px] font-bold text-white">
-              DH
-            </span>
-            <div>
-              <h1 className="text-[30px] font-bold text-ink">Welcome back, Dhinesh</h1>
-              {editingRole ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    setEditingRole(false)
-                  }}
-                  className="mt-1.5 flex items-center gap-2"
-                >
-                  <input
-                    autoFocus
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="rounded-md border border-line bg-surface px-2.5 py-1 text-[15px] text-ink outline-none focus:border-brand"
-                  />
-                  <button type="submit" className="text-[14px] font-semibold text-brand">
-                    Save
-                  </button>
-                </form>
-              ) : (
-                <p className="mt-1 text-[16px] text-ink-soft">
-                  {role} ·{" "}
-                  <button
-                    type="button"
-                    onClick={() => setEditingRole(true)}
-                    className="font-semibold text-brand underline"
-                  >
-                    Edit occupation and interests
-                  </button>
-                </p>
-              )}
-            </div>
-          </div>
+          <div className="hero-gradient relative overflow-hidden rounded-3xl px-6 py-7 text-white sm:px-9 sm:py-8">
+            <CloudCircuitGlyph className="pointer-events-none absolute -bottom-8 -right-8 h-56 w-56 rotate-[-8deg] text-white/10" />
 
-          {/* Stats */}
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { label: "Courses in progress", value: stats.coursesInProgress },
-              { label: "Hours completed", value: `${stats.hoursCompleted}h` },
-              { label: "Day streak", value: stats.streakDays },
-              { label: "Certificates earned", value: stats.certificatesEarned },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-line bg-surface p-4">
-                <p className="font-mono text-[22px] font-bold text-ink">{s.value}</p>
-                <p className="mt-0.5 text-[12.5px] text-ink-soft">{s.label}</p>
+            <div className="relative flex items-center gap-5">
+              <span className="grid h-16 w-16 flex-none place-items-center rounded-full bg-white/15 font-display text-[18px] font-bold text-white ring-1 ring-inset ring-white/40">
+                DH
+              </span>
+              <div>
+                <h1 className="text-[30px] font-bold text-white">Welcome back, Dhinesh</h1>
+                {editingRole ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      setEditingRole(false)
+                    }}
+                    className="mt-1.5 flex items-center gap-2"
+                  >
+                    <input
+                      autoFocus
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="rounded-md border border-line bg-surface px-2.5 py-1 text-[15px] text-ink outline-none focus:border-brand"
+                    />
+                    <button type="submit" className="text-[14px] font-semibold text-white underline">
+                      Save
+                    </button>
+                  </form>
+                ) : (
+                  <p className="mt-1 text-[16px] text-white/75">
+                    {role} ·{" "}
+                    <button
+                      type="button"
+                      onClick={() => setEditingRole(true)}
+                      className="font-semibold text-white underline"
+                    >
+                      Edit occupation and interests
+                    </button>
+                  </p>
+                )}
               </div>
-            ))}
+            </div>
+
+            {/* Stats */}
+            <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                { label: "Courses in progress", value: stats.coursesInProgress, Icon: PlayIcon },
+                { label: "Hours completed", value: `${stats.hoursCompleted}h`, Icon: ClockIcon },
+                { label: "Day streak", value: stats.streakDays, Icon: FlameIcon },
+                { label: "Certificates earned", value: stats.certificatesEarned, Icon: TrophyIcon },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm"
+                >
+                  <span className="mb-2.5 grid h-8 w-8 place-items-center rounded-lg bg-white/15">
+                    <s.Icon className="h-4 w-4 text-white" />
+                  </span>
+                  <p className="font-mono text-[22px] font-bold text-white">{s.value}</p>
+                  <p className="mt-0.5 text-[12.5px] text-white/70">{s.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Continue learning */}

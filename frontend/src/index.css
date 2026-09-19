@@ -39,3 +39,12 @@ h1, h2, h3, h4 {
 #root {
   min-height: 100svh;
 }
+
+.hero-gradient {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-brand) 65%, white) 0%,
+    var(--color-brand) 45%,
+    var(--color-brand-dark) 100%
+  );
+}

@@ -20,7 +20,7 @@ export function thumbGradient(color: string) {
 }
 
 /** Large, low-opacity watermark glyph per category — generic icons, not brand logos. */
-function CloudCircuitGlyph(props: { className?: string }) {
+export function CloudCircuitGlyph(props: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" fill="none" className={props.className} aria-hidden="true">
       <path
