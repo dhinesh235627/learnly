@@ -48,16 +48,16 @@ export default function CourseDetail() {
       <TopNav />
 
       <main className="flex-1">
-        <section className="overflow-hidden text-white" style={{ backgroundColor: course.color }}>
+        <section className="relative overflow-hidden text-white" style={{ backgroundColor: course.color }}>
+          {HERO_BACKGROUNDS[course.category] && (
+            <img
+              src={HERO_BACKGROUNDS[course.category]}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover object-right mix-blend-multiply opacity-25"
+            />
+          )}
           <div className="relative mx-auto max-w-6xl px-5 py-10">
-            {HERO_BACKGROUNDS[course.category] && (
-              <img
-                src={HERO_BACKGROUNDS[course.category]}
-                alt=""
-                aria-hidden="true"
-                className="pointer-events-none absolute right-0 top-1/2 hidden h-auto w-56 -translate-y-1/2 object-contain mix-blend-multiply opacity-90 lg:block"
-              />
-            )}
             <p className="text-[12.5px] font-semibold uppercase tracking-wide text-white/80">
               {course.category}
             </p>
