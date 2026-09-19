@@ -18,14 +18,16 @@ function read(courseId: string): Reminder | null {
 /** A per-course "remind me to continue" reminder, persisted locally and
  * fired as a browser notification while Learnly stays open in this tab. */
 export function useCourseReminder(courseId: string, courseTitle: string) {
+  const [loadedFor, setLoadedFor] = useState(courseId)
   const [reminder, setReminderState] = useState<Reminder | null>(() => read(courseId))
   const [permission, setPermission] = useState<NotificationPermission>(() =>
     typeof Notification === "undefined" ? "denied" : Notification.permission,
   )
 
-  useEffect(() => {
+  if (courseId !== loadedFor) {
+    setLoadedFor(courseId)
     setReminderState(read(courseId))
-  }, [courseId])
+  }
 
   useEffect(() => {
     if (!reminder) return

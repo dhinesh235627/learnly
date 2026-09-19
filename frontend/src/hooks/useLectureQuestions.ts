@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export type Question = { id: string; text: string; date: string }
 
@@ -16,11 +16,13 @@ function read(lectureId: string): Question[] {
 }
 
 export function useLectureQuestions(lectureId: string) {
+  const [loadedFor, setLoadedFor] = useState(lectureId)
   const [questions, setQuestions] = useState<Question[]>(() => read(lectureId))
 
-  useEffect(() => {
+  if (lectureId !== loadedFor) {
+    setLoadedFor(lectureId)
     setQuestions(read(lectureId))
-  }, [lectureId])
+  }
 
   function ask(text: string) {
     const trimmed = text.trim()

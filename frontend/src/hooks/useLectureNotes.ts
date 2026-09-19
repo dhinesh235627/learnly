@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 function storageKey(lectureId: string) {
   return `learnly:notes:${lectureId}`
@@ -13,11 +13,13 @@ function read(lectureId: string): string {
 }
 
 export function useLectureNotes(lectureId: string) {
+  const [loadedFor, setLoadedFor] = useState(lectureId)
   const [text, setTextState] = useState(() => read(lectureId))
 
-  useEffect(() => {
+  if (lectureId !== loadedFor) {
+    setLoadedFor(lectureId)
     setTextState(read(lectureId))
-  }, [lectureId])
+  }
 
   function setText(value: string) {
     setTextState(value)
