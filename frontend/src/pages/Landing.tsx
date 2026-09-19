@@ -4,6 +4,13 @@ import Footer from "../components/Footer"
 import MarketingNav from "../components/MarketingNav"
 import { courses } from "../data/courses"
 
+const categoryTiles = [
+  { category: "Microsoft Azure", image: "/images/tile-azure.jpg", color: "#0078D4" },
+  { category: "AWS", image: "/images/tile-aws.jpg", color: "#FF9900" },
+  { category: "Google Cloud", image: "/images/tile-gcp.jpg", color: "#4285F4" },
+  { category: "SAP", image: "/images/tile-sap.jpg", color: "#0FAAFF" },
+]
+
 export default function Landing() {
   return (
     <div className="flex min-h-svh flex-col">
@@ -11,63 +18,85 @@ export default function Landing() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="glass-hero flex min-h-svh flex-col items-center justify-center px-5 py-20 text-center">
-          <div className="glass-blob -left-28 -top-36 h-[520px] w-[520px] bg-[#ff8a9b] opacity-35" />
-          <div className="glass-blob -right-24 -bottom-40 h-[460px] w-[460px] bg-brand-soft opacity-25" />
-          <div className="glass-blob bottom-[10%] left-[8%] h-[380px] w-[380px] bg-brand-dark opacity-50" />
-
-          <p className="relative mb-2 font-display text-[12px] font-bold uppercase tracking-[0.18em] text-white/80">
-            Cloud &amp; enterprise skills
-          </p>
-          <h1 className="relative font-script text-[96px] leading-none text-paper drop-shadow-[0_6px_30px_rgba(0,0,0,0.25)] sm:text-[150px]">
-            Learnly
-          </h1>
-
-          <div className="glass-card relative mt-2 w-full max-w-2xl rounded-[28px] px-8 py-9 sm:px-10">
-            <h2 className="text-[22px] font-bold leading-tight text-white sm:text-[28px]">
-              Get certified on the platforms companies actually run on.
-            </h2>
-            <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-white/85">
-              Microsoft Azure, AWS, Google Cloud, and SAP training in one place — structured
-              courses, hands-on labs, and certification prep taught by practitioners.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                to="/login"
-                className="rounded-[10px] bg-white px-6 py-3 text-[15px] font-bold text-brand-dark transition hover:bg-paper"
-              >
-                Start learning free
-              </Link>
-              <Link
-                to="/home"
-                className="rounded-[10px] border border-white/40 bg-white/10 px-6 py-3 text-[15px] font-bold text-white transition hover:bg-white/20"
-              >
-                Browse courses
-              </Link>
+        <section className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-dark">
+          <div className="mx-auto grid max-w-6xl items-center gap-0 px-5 py-10 md:grid-cols-2 md:gap-8 md:py-0">
+            <div className="relative z-10 max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
+              <p className="mb-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
+                Cloud &amp; enterprise skills
+              </p>
+              <h1 className="text-[26px] font-extrabold leading-[1.15] text-ink sm:text-[30px]">
+                Get certified on the platforms companies actually run on.
+              </h1>
+              <p className="mt-3 text-[14.5px] leading-relaxed text-ink-soft">
+                Microsoft Azure, AWS, Google Cloud, and SAP training in one place — structured
+                courses, hands-on labs, and certification prep taught by practitioners.
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/login"
+                  className="rounded-md bg-brand px-6 py-3 text-[14.5px] font-bold text-white transition hover:bg-brand-dark"
+                >
+                  Start learning free
+                </Link>
+                <Link
+                  to="/home"
+                  className="rounded-md border border-line px-6 py-3 text-[14.5px] font-bold text-ink transition hover:border-ink-soft"
+                >
+                  Browse courses
+                </Link>
+              </div>
             </div>
-            <p className="mt-4 text-[12.5px] text-white/65">
-              Trusted by learners preparing for AZ-900, AWS SAA-C03, GCP ACE, and SAP S/4HANA
-            </p>
+
+            <div className="relative -mx-5 h-[260px] overflow-hidden sm:h-[340px] md:mx-0 md:h-[420px] md:rounded-l-2xl">
+              <img
+                src="/images/landing-hero.jpg"
+                alt="Two learners reviewing a course together on a laptop"
+                className="h-full w-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/50 via-brand-dark/10 to-transparent md:from-brand-dark/40" />
+            </div>
           </div>
         </section>
 
-        {/* Category strip */}
+        {/* Category tiles */}
         <section className="border-b border-line bg-paper">
-          <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-3 px-5 py-6">
-            {courses.map((c) => (
-              <span
-                key={c.id}
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-[13.5px] font-semibold text-ink-soft"
-              >
-                <span
-                  className="grid h-5 w-5 flex-none place-items-center rounded-full text-[10px] font-bold text-white"
-                  style={{ backgroundColor: c.color }}
+          <div className="mx-auto max-w-6xl px-5 py-14">
+            <h2 className="text-[26px] font-bold text-ink">
+              Learn essential <span className="font-script text-[34px] text-brand">cloud &amp; enterprise</span>{" "}
+              skills
+            </h2>
+            <p className="mt-1.5 max-w-lg text-[14.5px] text-ink-soft">
+              Learnly helps you build in-demand cloud skills fast and advance your career in a
+              changing job market.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {categoryTiles.map((tile) => (
+                <Link
+                  key={tile.category}
+                  to={`/home?category=${encodeURIComponent(tile.category)}`}
+                  className="group relative block h-48 overflow-hidden rounded-xl sm:h-56"
                 >
-                  {c.category[0]}
-                </span>
-                {c.category}
-              </span>
-            ))}
+                  <img
+                    src={tile.image}
+                    alt=""
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+                  <div
+                    className="absolute inset-0 transition group-hover:opacity-90"
+                    style={{
+                      background: `linear-gradient(180deg, ${tile.color}22 0%, ${tile.color}dd 100%)`,
+                    }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
+                    <span className="text-[14.5px] font-bold text-white">{tile.category}</span>
+                    <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white/25 text-white transition group-hover:bg-white/40">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 

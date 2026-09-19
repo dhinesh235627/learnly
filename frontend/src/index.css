@@ -51,24 +51,3 @@
     var(--color-brand-dark) 100%
   );
 }
-
-.glass-hero {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(160deg, var(--color-brand-dark) 0%, var(--color-brand) 45%, #d9576b 100%);
-}
-
-.glass-blob {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(70px);
-  pointer-events: none;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-}
