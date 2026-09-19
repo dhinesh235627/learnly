@@ -16,10 +16,8 @@ function seedOnce() {
       const seed = [
         "azb-01-intro",
         "azb-02-cloud-fundamentals",
-        "aws-shared-responsibility",
-        "aws-iam-policies",
-        "aws-mfa",
-        "aws-ec2-types",
+        "aws-01-intro",
+        "aws-02-ec2-instance",
       ]
       localStorage.setItem(COMPLETED_KEY, JSON.stringify(seed))
     }

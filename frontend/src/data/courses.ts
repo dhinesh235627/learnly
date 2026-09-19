@@ -96,7 +96,7 @@ export const courses: Course[] = [
   },
   {
     id: "aws-solutions-architect",
-    title: "AWS Certified Solutions Architect — Associate 2026",
+    title: "AWS for Spring Boot Developers: EC2, S3, RDS, DynamoDB & Beanstalk",
     instructor: "Marcus Webb",
     price: 599,
     originalPrice: 3499,
@@ -108,48 +108,42 @@ export const courses: Course[] = [
     rating: 4.7,
     ratingCount: 1832,
     description:
-      "Hands-on labs across EC2, VPC, S3, and IAM to prepare you for the SAA-C03 exam and real-world architecture reviews.",
+      "A hands-on, project-based walkthrough of deploying real Spring Boot and Angular applications on AWS — EC2, S3, RDS, DynamoDB, Elastic Beanstalk, Secrets Manager, and SQS.",
     whatYouLearn: [
-      "Design highly available, cost-optimized AWS architectures",
-      "Configure VPCs, subnets, and security groups",
-      "Choose the right storage and database service for a workload",
-      "Apply the AWS Well-Architected Framework",
+      "Launch and configure EC2 instances for a live application",
+      "Deploy Spring Boot and Angular apps to Elastic Beanstalk and S3",
+      "Connect applications to RDS (MySQL) and DynamoDB",
+      "Manage credentials with Secrets Manager and integrate SQS messaging",
     ],
     curriculum: [
       {
-        title: "IAM & Account Security",
+        title: "Getting Started",
         lectures: [
-          { id: "aws-shared-responsibility", title: "Understanding the Shared Responsibility Model", minutes: 9 },
-          { id: "aws-iam-policies", title: "IAM Users, Groups & Policies", minutes: 14 },
-          { id: "aws-mfa", title: "Multi-Factor Authentication & Root Account Security", minutes: 11 },
+          { id: "aws-01-intro", title: "What is AWS? Amazon Cloud Services Tutorial", minutes: 9, videoUrl: qaVideo("aws-01-intro.mp4") },
         ],
       },
       {
-        title: "Compute & Networking (EC2, VPC)",
+        title: "Compute & Deployment",
         lectures: [
-          { id: "aws-ec2-types", title: "EC2 Instance Types & Pricing Models", minutes: 12 },
-          {
-            id: "aws-vpc-architecture",
-            title: "Designing Resilient VPC Architectures",
-            minutes: 22,
-            videoUrl: "/videos/aws.mp4",
-          },
-          { id: "aws-sg-vs-nacl", title: "Security Groups vs. Network ACLs", minutes: 10 },
-          { id: "aws-elb-asg", title: "Elastic Load Balancing & Auto Scaling", minutes: 15 },
+          { id: "aws-02-ec2-instance", title: "Create an EC2 Instance in AWS — Step by Step", minutes: 8, videoUrl: qaVideo("aws-02-ec2-instance.mp4") },
+          { id: "aws-03-ec2-s3-deploy", title: "Deploy a Spring Boot Application on AWS Using EC2 & S3", minutes: 18, videoUrl: qaVideo("aws-03-ec2-s3-deploy.mp4") },
+          { id: "aws-04-beanstalk-tomcat", title: "Deploy Spring Boot Applications with AWS Elastic Beanstalk (Tomcat)", minutes: 9, videoUrl: qaVideo("aws-04-beanstalk-tomcat.mp4") },
         ],
       },
       {
-        title: "Storage & Databases",
+        title: "Databases & Storage",
         lectures: [
-          { id: "aws-s3-classes", title: "S3 Storage Classes & Lifecycle Rules", minutes: 13 },
-          { id: "aws-rds", title: "RDS Multi-AZ vs. Read Replicas", minutes: 14 },
-          { id: "aws-storage-choice", title: "Choosing Between EBS, EFS & Instance Store", minutes: 11 },
+          { id: "aws-05-rds-mysql", title: "Amazon RDS — Deploy a Spring Boot + MySQL CRUD App to Elastic Beanstalk", minutes: 15, videoUrl: qaVideo("aws-05-rds-mysql.mp4") },
+          { id: "aws-06-dynamodb", title: "AWS DynamoDB — Spring Boot CRUD Example on Elastic Beanstalk", minutes: 34, videoUrl: qaVideo("aws-06-dynamodb.mp4") },
+          { id: "aws-07-angular-s3", title: "Deploy an Angular Application to AWS S3", minutes: 7, videoUrl: qaVideo("aws-07-angular-s3.mp4") },
         ],
       },
       {
-        title: "SAA-C03 Practice Exam",
+        title: "Advanced Integration",
         lectures: [
-          { id: "aws-practice-exam", title: "Practice Exam Walkthrough: Scenario Questions", minutes: 25 },
+          { id: "aws-08-secrets-manager", title: "Manage Credentials Securely with AWS Secrets Manager & RDS", minutes: 27, videoUrl: qaVideo("aws-08-secrets-manager.mp4") },
+          { id: "aws-09-sqs", title: "Spring Cloud AWS — Amazon Simple Queue Service (SQS) with Spring Boot", minutes: 19, videoUrl: qaVideo("aws-09-sqs.mp4") },
+          { id: "aws-10-fullstack-beanstalk", title: "Full-Stack Deployment: Spring Boot + Angular + MySQL on AWS (Beanstalk, S3, RDS)", minutes: 21, videoUrl: qaVideo("aws-10-fullstack-beanstalk.mp4") },
         ],
       },
     ],

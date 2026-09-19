@@ -1,7 +1,7 @@
 export const notifications = [
   {
     id: "n1",
-    text: "3 new lectures were added to AWS Certified Solutions Architect.",
+    text: "3 new lectures were added to AWS for Spring Boot Developers.",
     courseId: "aws-solutions-architect",
     time: "2h ago",
   },
