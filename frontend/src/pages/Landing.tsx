@@ -72,29 +72,21 @@ export default function Landing() {
 
             <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
               {categoryTiles.map((tile) => (
-                <Link
+                <div
                   key={tile.category}
-                  to={`/home?category=${encodeURIComponent(tile.category)}`}
-                  className="group relative block h-48 overflow-hidden rounded-xl sm:h-56"
+                  className="relative block h-48 overflow-hidden rounded-xl sm:h-56"
                 >
-                  <img
-                    src={tile.image}
-                    alt=""
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
+                  <img src={tile.image} alt="" className="h-full w-full object-cover" />
                   <div
-                    className="absolute inset-0 transition group-hover:opacity-90"
+                    className="absolute inset-0"
                     style={{
                       background: `linear-gradient(180deg, ${tile.color}22 0%, ${tile.color}dd 100%)`,
                     }}
                   />
-                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
+                  <div className="absolute inset-x-0 bottom-0 p-4">
                     <span className="text-[14.5px] font-bold text-white">{tile.category}</span>
-                    <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white/25 text-white transition group-hover:bg-white/40">
-                      →
-                    </span>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
