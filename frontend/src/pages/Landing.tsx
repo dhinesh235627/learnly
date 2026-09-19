@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import CourseCard from "../components/CourseCard"
 import Footer from "../components/Footer"
 import MarketingNav from "../components/MarketingNav"
-import { categories, courses } from "../data/courses"
+import { courses } from "../data/courses"
 
 export default function Landing() {
   return (
@@ -11,68 +11,61 @@ export default function Landing() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-line bg-surface">
-          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_1fr] md:items-center md:py-20">
-            <div>
-              <p className="mb-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
-                Cloud &amp; enterprise skills
-              </p>
-              <h1 className="text-[34px] font-extrabold leading-[1.1] text-ink sm:text-[44px]">
-                Get certified on the platforms companies actually run on.
-              </h1>
-              <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-ink-soft">
-                Learnly brings Microsoft Azure, AWS, Google Cloud, and SAP training into one
-                place — structured courses, hands-on labs, and certification prep taught by
-                practitioners.
-              </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Link
-                  to="/login"
-                  className="rounded-md bg-brand px-6 py-3 text-[15px] font-semibold text-white transition hover:bg-brand-dark"
-                >
-                  Start learning free
-                </Link>
-                <Link
-                  to="/home"
-                  className="rounded-md border border-line px-6 py-3 text-[15px] font-semibold text-ink transition hover:border-ink-soft"
-                >
-                  Browse courses
-                </Link>
-              </div>
-              <p className="mt-5 text-[13px] text-ink-faint">
-                Trusted by learners preparing for AZ-900, AWS SAA-C03, GCP ACE, and SAP S/4HANA
-                certifications.
-              </p>
-            </div>
+        <section className="glass-hero flex min-h-svh flex-col items-center justify-center px-5 py-20 text-center">
+          <div className="glass-blob -left-28 -top-36 h-[520px] w-[520px] bg-[#ff8a9b] opacity-35" />
+          <div className="glass-blob -right-24 -bottom-40 h-[460px] w-[460px] bg-brand-soft opacity-25" />
+          <div className="glass-blob bottom-[10%] left-[8%] h-[380px] w-[380px] bg-brand-dark opacity-50" />
 
-            <div className="grid grid-cols-2 gap-3">
-              {courses.map((c) => (
-                <div
-                  key={c.id}
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border border-line bg-paper p-6 text-center"
-                >
-                  <span
-                    className="grid h-12 w-12 place-items-center rounded-lg text-lg font-bold text-white"
-                    style={{ backgroundColor: c.color }}
-                  >
-                    {c.category[0]}
-                  </span>
-                  <p className="text-[13.5px] font-semibold text-ink">{c.category}</p>
-                </div>
-              ))}
+          <p className="relative mb-2 font-display text-[12px] font-bold uppercase tracking-[0.18em] text-white/80">
+            Cloud &amp; enterprise skills
+          </p>
+          <h1 className="relative font-script text-[96px] leading-none text-paper drop-shadow-[0_6px_30px_rgba(0,0,0,0.25)] sm:text-[150px]">
+            Learnly
+          </h1>
+
+          <div className="glass-card relative mt-2 w-full max-w-2xl rounded-[28px] px-8 py-9 sm:px-10">
+            <h2 className="text-[22px] font-bold leading-tight text-white sm:text-[28px]">
+              Get certified on the platforms companies actually run on.
+            </h2>
+            <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-white/85">
+              Microsoft Azure, AWS, Google Cloud, and SAP training in one place — structured
+              courses, hands-on labs, and certification prep taught by practitioners.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/login"
+                className="rounded-[10px] bg-white px-6 py-3 text-[15px] font-bold text-brand-dark transition hover:bg-paper"
+              >
+                Start learning free
+              </Link>
+              <Link
+                to="/home"
+                className="rounded-[10px] border border-white/40 bg-white/10 px-6 py-3 text-[15px] font-bold text-white transition hover:bg-white/20"
+              >
+                Browse courses
+              </Link>
             </div>
+            <p className="mt-4 text-[12.5px] text-white/65">
+              Trusted by learners preparing for AZ-900, AWS SAA-C03, GCP ACE, and SAP S/4HANA
+            </p>
           </div>
         </section>
 
         {/* Category strip */}
         <section className="border-b border-line bg-paper">
-          <div className="mx-auto flex max-w-6xl flex-wrap gap-3 px-5 py-6">
-            {categories.map((cat) => (
+          <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-3 px-5 py-6">
+            {courses.map((c) => (
               <span
-                key={cat}
-                className="rounded-full border border-line bg-surface px-4 py-1.5 text-[13.5px] font-semibold text-ink-soft"
+                key={c.id}
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-[13.5px] font-semibold text-ink-soft"
               >
-                {cat}
+                <span
+                  className="grid h-5 w-5 flex-none place-items-center rounded-full text-[10px] font-bold text-white"
+                  style={{ backgroundColor: c.color }}
+                >
+                  {c.category[0]}
+                </span>
+                {c.category}
               </span>
             ))}
           </div>
