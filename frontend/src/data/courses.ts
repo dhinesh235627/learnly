@@ -24,6 +24,9 @@ export type Course = {
   rating: number
   ratingCount: number
   description: string
+  about: string[]
+  requirements: string[]
+  instructorBio: string
   whatYouLearn: string[]
   curriculum: Section[]
   announcements?: { date: string; text: string }[]
@@ -55,6 +58,18 @@ export const courses: Course[] = [
     ratingCount: 2145,
     description:
       "A hands-on introduction to Microsoft Azure — cloud fundamentals, core resources, virtual machines, networking, storage, and CLI automation — built as a practical roadmap toward AZ-900 and AZ-104.",
+    about: [
+      "This course is a hands-on walkthrough of core Microsoft Azure services, built as a practical companion to the AZ-900 and AZ-104 exam objectives — not just theory, but the actual console clicks and CLI commands you'd use on the job.",
+      "You'll start with cloud computing fundamentals and Azure's global infrastructure, then move into resource groups, virtual machines (including deploying Jenkins on a VM), a full VNet architecture with firewalls, NSGs, and Bastion, and finish with storage services and CLI automation.",
+      "Every lecture is a real recorded session, not slides read aloud — expect terminal output, the Azure portal, and the occasional rough edge left in because that's how the tools actually behave.",
+    ],
+    requirements: [
+      "An active or free-tier Azure subscription (the free account covers everything used in this course)",
+      "Basic comfort with a command line — no prior cloud experience required",
+      "No prior Azure or AZ-900 knowledge assumed",
+    ],
+    instructorBio:
+      "Vishwaanth builds and ships this course's platform end to end, and teaches Azure the way he actually uses it day to day — resource groups, networking, and automation via the CLI.",
     whatYouLearn: [
       "Explain core cloud computing concepts and Azure's global infrastructure",
       "Deploy and manage Azure resources, resource groups, and virtual machines (including running Jenkins on an Azure VM)",
@@ -116,6 +131,18 @@ export const courses: Course[] = [
     ratingCount: 1832,
     description:
       "A hands-on, project-based walkthrough of deploying real Spring Boot and Angular applications on AWS — EC2, S3, RDS, DynamoDB, Elastic Beanstalk, Secrets Manager, and SQS.",
+    about: [
+      "A project-based walkthrough of deploying real Spring Boot and Angular applications on AWS — not exam-prep slides, actual console work and command-line deployments.",
+      "You'll launch EC2 instances, deploy to Elastic Beanstalk, connect applications to RDS and DynamoDB, manage credentials with Secrets Manager, and wire up SQS messaging — the same services you'd reach for building a real product on AWS.",
+      "By the end, you'll have deployed a full-stack Spring Boot + Angular + MySQL application end to end on AWS infrastructure, not just clicked through a single toy example.",
+    ],
+    requirements: [
+      "An AWS account (the Free Tier covers everything used in this course)",
+      "Basic Java/Spring Boot familiarity is helpful but not required to follow along",
+      "Comfort with the command line",
+    ],
+    instructorBio:
+      "Marcus Webb focuses on practical, deployment-first AWS training — less exam trivia, more \"here's how you'd actually ship this.\"",
     whatYouLearn: [
       "Launch and configure EC2 instances for a live application",
       "Deploy Spring Boot and Angular apps to Elastic Beanstalk and S3",
@@ -175,6 +202,18 @@ export const courses: Course[] = [
     ratingCount: 945,
     description:
       "Deploy and manage workloads on Google Cloud using the Console, gcloud CLI, and Cloud Shell — aligned to the ACE exam.",
+    about: [
+      "Deploy and manage real workloads on Google Cloud using the Console, the gcloud CLI, and Cloud Shell — structured around the Associate Cloud Engineer exam guide.",
+      "You'll cover project setup and IAM, Compute Engine and GKE, serverless deployment with Cloud Run, and the core networking and storage services you'll be tested on and actually use.",
+      "Each section pairs a short concept explanation with a hands-on task in the Console or CLI, so you're building muscle memory, not just recognizing terms.",
+    ],
+    requirements: [
+      "A Google Cloud account (the free trial credit is enough to follow along)",
+      "No prior GCP experience required",
+      "Basic comfort with a terminal for the gcloud CLI sections",
+    ],
+    instructorBio:
+      "Mei Lin Tan teaches Google Cloud fundamentals with an emphasis on the tools you'll actually use day to day — Console, gcloud, and Cloud Shell.",
     whatYouLearn: [
       "Set up a GCP project, billing, and IAM roles",
       "Deploy Compute Engine, GKE, and Cloud Run workloads",
@@ -232,6 +271,17 @@ export const courses: Course[] = [
     ratingCount: 612,
     description:
       "A business-process view of SAP S/4HANA — finance, procurement, and supply chain — for professionals working alongside SAP teams.",
+    about: [
+      "A business-process view of SAP S/4HANA — finance, procurement, and supply chain — built for professionals who work alongside SAP teams rather than configure the system themselves.",
+      "You'll navigate the Fiori launchpad, understand how organizational structures map to configuration, and walk through real finance and procurement processes end to end, finishing with a case study that ties it all together.",
+      "This isn't a developer-focused ABAP course — it's aimed at business stakeholders who need to speak confidently with SAP implementation teams.",
+    ],
+    requirements: [
+      "No SAP experience required — this course is written for business professionals, not developers",
+      "General familiarity with business processes (finance, procurement, or supply chain) is helpful but not required",
+    ],
+    instructorBio:
+      "Ingrid Voss brings a business-process lens to SAP training, focused on how the system supports real finance and procurement workflows rather than technical configuration.",
     whatYouLearn: [
       "Navigate the SAP Fiori launchpad and core modules",
       "Understand S/4HANA finance and procurement processes",

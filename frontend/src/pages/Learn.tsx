@@ -369,7 +369,59 @@ export default function Learn() {
                   })}
                 </div>
               )}
-              {tab === "Overview" && <p>{course.description}</p>}
+              {tab === "Overview" && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h2 className="text-[15px] font-bold text-ink">About this course</h2>
+                    <div className="mt-2 flex flex-col gap-3">
+                      {course.about.map((p) => (
+                        <p key={p}>{p}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h2 className="text-[15px] font-bold text-ink">What you'll learn</h2>
+                    <ul className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+                      {course.whatYouLearn.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="flex-none text-teal">✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h2 className="text-[15px] font-bold text-ink">Requirements</h2>
+                    <ul className="mt-2 flex flex-col gap-1.5">
+                      {course.requirements.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="flex-none text-ink-faint">•</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h2 className="text-[15px] font-bold text-ink">Instructor</h2>
+                    <div className="mt-2 flex gap-3">
+                      <span className="grid h-11 w-11 flex-none place-items-center rounded-full bg-brand-soft text-[13px] font-bold text-brand">
+                        {course.instructor
+                          .split(" ")
+                          .map((w) => w[0])
+                          .join("")
+                          .slice(0, 2)}
+                      </span>
+                      <div>
+                        <p className="font-semibold text-ink">{course.instructor}</p>
+                        <p className="mt-0.5">{course.instructorBio}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               {tab === "Q&A" && (
                 <div>
                   <div className="flex gap-3">
