@@ -21,8 +21,6 @@ export default function CourseCard({
   const discount = Math.round((1 - course.price / course.originalPrice) * 100)
   const wishlist = useIdSet("learnly:wishlist")
   const wishlisted = wishlist.has(course.id)
-  const cart = useIdSet("learnly:cart")
-  const inCart = cart.has(course.id)
   const completed = useIdSet("learnly:completed")
   const progress = courseProgress(course, completed.ids)
   const inProgress = progress.done > 0 && progress.done < progress.total
@@ -164,22 +162,6 @@ export default function CourseCard({
                   {discount}% off
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  cart.toggle(course.id)
-                }}
-                className={
-                  "mt-1.5 w-full rounded-md border py-2 text-[13px] font-bold transition " +
-                  (inCart
-                    ? "border-brand bg-brand-soft text-brand"
-                    : "border-line text-ink hover:border-ink-soft")
-                }
-              >
-                {inCart ? "✓ Added to cart" : "Add to cart"}
-              </button>
             </>
           )}
         </div>
