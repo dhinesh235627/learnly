@@ -44,7 +44,7 @@ export default function CourseCard({
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
 
         {course.bestseller && (
-          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded bg-amber-400 px-1.5 py-0.5 text-[10.5px] font-bold text-amber-950 shadow-sm">
+          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded bg-brand px-1.5 py-0.5 text-[10.5px] font-bold text-white shadow-sm">
             ★ Bestseller
           </span>
         )}
