@@ -54,7 +54,7 @@ export default function CourseDetail() {
               src={HERO_BACKGROUNDS[course.category]}
               alt=""
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover object-right mix-blend-multiply opacity-25"
+              className="pointer-events-none absolute bottom-3 right-3 h-16 w-24 object-contain object-right mix-blend-multiply opacity-25 sm:h-20 sm:w-32 md:h-24 md:w-40"
             />
           )}
           <div className="relative mx-auto max-w-6xl px-5 py-10">
