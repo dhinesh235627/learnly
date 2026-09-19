@@ -238,9 +238,9 @@ export default function Learn() {
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-[1760px] flex-1">
-        <div className="min-w-0">
-          <div className="relative aspect-video w-full bg-black">
+      <div className="flex-1">
+        <div className="bg-black">
+          <div className="relative mx-auto aspect-video w-full max-w-[1100px] bg-black">
             {lecture.videoUrl ? (
               <>
                 <video
@@ -273,7 +273,9 @@ export default function Learn() {
               </div>
             )}
           </div>
+        </div>
 
+        <div className="mx-auto w-full max-w-[1100px]">
           <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
             <button
               type="button"
