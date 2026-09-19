@@ -2,7 +2,6 @@ import { motion } from "motion/react"
 import { courseHours, courseProgress } from "../data/courses"
 import type { Course } from "../data/courses"
 import { useIdSet } from "../hooks/useIdSet"
-import { CategoryGlyph, thumbGradient } from "./CourseThumbArt"
 import RatingStars from "./RatingStars"
 
 export default function CourseCard({
@@ -25,12 +24,16 @@ export default function CourseCard({
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className="flex w-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-sm hover:shadow-lg"
     >
-      <div className="relative flex h-36 items-center justify-center overflow-hidden" style={thumbGradient(course.color)}>
-        <CategoryGlyph
-          category={course.category}
-          className="pointer-events-none absolute -bottom-5 -right-5 h-32 w-32 rotate-[-8deg] text-white/25"
+      <div
+        className="relative flex h-36 items-center justify-center overflow-hidden"
+        style={{ background: `color-mix(in srgb, ${course.color} 10%, white)` }}
+      >
+        <img
+          src={course.logo}
+          alt={course.category}
+          className="h-16 max-w-[65%] object-contain"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1.5" style={{ backgroundColor: course.color }} />
 
         {course.bestseller && (
           <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded bg-brand px-1.5 py-0.5 text-[10.5px] font-bold text-white shadow-sm">
@@ -49,15 +52,11 @@ export default function CourseCard({
           }}
           className={
             "absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full text-[14px] transition " +
-            (wishlisted ? "bg-white text-brand" : "bg-black/25 text-white hover:bg-black/40")
+            (wishlisted ? "bg-brand-soft text-brand" : "bg-black/8 text-ink-faint hover:bg-black/15")
           }
         >
           {wishlisted ? "♥" : "♡"}
         </motion.button>
-
-        <span className="relative grid h-14 w-24 place-items-center rounded-lg bg-white/95 px-3 shadow-md backdrop-blur-sm">
-          <img src={course.logo} alt={course.category} className="h-7 w-full object-contain" />
-        </span>
       </div>
 
       <div className="flex flex-1 flex-col gap-1.5 p-4">
