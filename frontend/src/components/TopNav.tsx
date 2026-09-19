@@ -6,7 +6,7 @@ import { notifications } from "../data/notifications"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useIdSet } from "../hooks/useIdSet"
 
-export default function TopNav() {
+export default function TopNav({ showCategories = true }: { showCategories?: boolean }) {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const [query, setQuery] = useState(params.get("q") ?? "")
@@ -162,20 +162,22 @@ export default function TopNav() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-6xl gap-7 overflow-x-auto px-5 pb-3">
-        {categories.map((cat) => (
-          <Link
-            key={cat}
-            to={activeCategory === cat ? "/home" : `/home?category=${encodeURIComponent(cat)}`}
-            className={
-              "whitespace-nowrap text-[15px] font-semibold " +
-              (activeCategory === cat ? "text-brand" : "text-ink-soft hover:text-ink")
-            }
-          >
-            {cat}
-          </Link>
-        ))}
-      </div>
+      {showCategories && (
+        <div className="mx-auto flex max-w-6xl gap-7 overflow-x-auto px-5 pb-3">
+          {categories.map((cat) => (
+            <Link
+              key={cat}
+              to={activeCategory === cat ? "/home" : `/home?category=${encodeURIComponent(cat)}`}
+              className={
+                "whitespace-nowrap text-[15px] font-semibold " +
+                (activeCategory === cat ? "text-brand" : "text-ink-soft hover:text-ink")
+              }
+            >
+              {cat}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   )
 }

@@ -31,7 +31,7 @@ export default function Home() {
     return (
       <div className="flex min-h-svh flex-col">
         <PromoBanner />
-        <TopNav />
+        <TopNav showCategories={false} />
         <main className="flex-1 bg-paper">
           <div className="mx-auto max-w-6xl px-5 py-8">
             <p className="text-[14px] text-ink-soft">
@@ -67,7 +67,7 @@ export default function Home() {
     return (
       <div className="flex min-h-svh flex-col">
         <PromoBanner />
-        <TopNav />
+        <TopNav showCategories={false} />
         <main className="flex-1 bg-paper">
           <div className="mx-auto max-w-6xl px-5 py-8">
             <h1 className="text-[24px] font-bold text-ink">{category} courses</h1>
@@ -91,39 +91,39 @@ export default function Home() {
   return (
     <div className="flex min-h-svh flex-col">
       <PromoBanner />
-      <TopNav />
+      <TopNav showCategories={false} />
 
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-8">
-          <div className="hero-gradient relative overflow-hidden rounded-3xl px-6 py-7 text-white sm:px-9 sm:py-8">
-            <CloudCircuitGlyph className="pointer-events-none absolute -bottom-8 -right-8 h-56 w-56 rotate-[-8deg] text-white/10" />
+          <div className="hero-gradient relative overflow-hidden rounded-2xl px-5 py-5 text-white sm:px-7">
+            <CloudCircuitGlyph className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rotate-[-8deg] text-white/10" />
 
-            <div className="relative flex items-center gap-5">
-              <span className="grid h-16 w-16 flex-none place-items-center rounded-full bg-white/15 font-display text-[18px] font-bold text-white ring-1 ring-inset ring-white/40">
+            <div className="relative flex items-center gap-4">
+              <span className="grid h-12 w-12 flex-none place-items-center rounded-full bg-white/15 font-display text-[15px] font-bold text-white ring-1 ring-inset ring-white/40">
                 DH
               </span>
               <div>
-                <h1 className="text-[30px] font-bold text-white">Welcome back, Dhinesh</h1>
+                <h1 className="text-[21px] font-bold text-white">Welcome back, Dhinesh</h1>
                 {editingRole ? (
                   <form
                     onSubmit={(e) => {
                       e.preventDefault()
                       setEditingRole(false)
                     }}
-                    className="mt-1.5 flex items-center gap-2"
+                    className="mt-1 flex items-center gap-2"
                   >
                     <input
                       autoFocus
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      className="rounded-md border border-line bg-surface px-2.5 py-1 text-[15px] text-ink outline-none focus:border-brand"
+                      className="rounded-md border border-line bg-surface px-2.5 py-1 text-[13.5px] text-ink outline-none focus:border-brand"
                     />
-                    <button type="submit" className="text-[14px] font-semibold text-white underline">
+                    <button type="submit" className="text-[13px] font-semibold text-white underline">
                       Save
                     </button>
                   </form>
                 ) : (
-                  <p className="mt-1 text-[16px] text-white/75">
+                  <p className="mt-0.5 text-[13.5px] text-white/75">
                     {role} ·{" "}
                     <button
                       type="button"
@@ -138,22 +138,17 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="relative mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/15 pt-3">
               {[
                 { label: "Courses in progress", value: stats.coursesInProgress, Icon: PlayIcon },
                 { label: "Hours completed", value: `${stats.hoursCompleted}h`, Icon: ClockIcon },
                 { label: "Day streak", value: stats.streakDays, Icon: FlameIcon },
                 { label: "Certificates earned", value: stats.certificatesEarned, Icon: TrophyIcon },
               ].map((s) => (
-                <div
-                  key={s.label}
-                  className="rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm"
-                >
-                  <span className="mb-2.5 grid h-8 w-8 place-items-center rounded-lg bg-white/15">
-                    <s.Icon className="h-4 w-4 text-white" />
-                  </span>
-                  <p className="font-mono text-[22px] font-bold text-white">{s.value}</p>
-                  <p className="mt-0.5 text-[12.5px] text-white/70">{s.label}</p>
+                <div key={s.label} className="flex items-center gap-1.5">
+                  <s.Icon className="h-3.5 w-3.5 text-white/60" />
+                  <span className="font-mono text-[14px] font-bold text-white">{s.value}</span>
+                  <span className="text-[12px] text-white/65">{s.label}</span>
                 </div>
               ))}
             </div>
