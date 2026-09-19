@@ -7,8 +7,10 @@ import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
 import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
+import { useLectureNotes } from "../hooks/useLectureNotes"
+import { useLectureQuestions } from "../hooks/useLectureQuestions"
 
-const TABS = ["Overview", "Q&A", "Notes", "Announcements", "Reviews", "Learning tools"] as const
+const TABS = ["Course content", "Overview", "Q&A", "Notes", "Announcements", "Reviews", "Learning tools"] as const
 
 export default function Learn() {
   const { courseId, lectureId } = useParams()
@@ -16,8 +18,9 @@ export default function Learn() {
   const course = courses.find((c) => c.id === courseId)
   const [openSection, setOpenSection] = useState(0)
   const completed = useIdSet("learnly:completed")
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Overview")
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Course content")
   const [showCaptionsNotice, setShowCaptionsNotice] = useState(false)
+  const [questionDraft, setQuestionDraft] = useState("")
 
   const [openRating, setOpenRating] = useState(false)
   const [openProgress, setOpenProgress] = useState(false)
@@ -31,6 +34,8 @@ export default function Learn() {
 
   const { rating, rate } = useCourseRating(courseId ?? "")
   const { review, submit } = useCourseReview(courseId ?? "")
+  const { text: noteText, setText: setNoteText } = useLectureNotes(lectureId ?? "")
+  const { questions, ask } = useLectureQuestions(lectureId ?? "")
 
   const lecture = course && lectureId ? findLecture(course, lectureId) : undefined
 
@@ -63,6 +68,12 @@ export default function Learn() {
     submit(rating, reviewDraft.trim())
     setReviewDraft("")
     setOpenRating(false)
+  }
+
+  function askQuestion() {
+    if (!questionDraft.trim()) return
+    ask(questionDraft)
+    setQuestionDraft("")
   }
 
   function share() {
@@ -210,9 +221,8 @@ export default function Learn() {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[1760px] flex-1 flex-col lg:flex-row">
-        {/* Main column */}
-        <div className="min-w-0 flex-1">
+      <div className="mx-auto w-full max-w-[1760px] flex-1">
+        <div className="min-w-0">
           <div className="relative aspect-video w-full bg-black">
             {lecture.videoUrl ? (
               <>
@@ -292,9 +302,116 @@ export default function Learn() {
             </div>
 
             <div className="py-5 text-[14px] leading-relaxed text-ink-soft">
+              {tab === "Course content" && (
+                <div className="overflow-hidden rounded-lg border border-line text-ink">
+                  {course.curriculum.map((section, i) => {
+                    const isOpen = activeSection === i || openSection === i
+                    return (
+                      <div key={section.title} className="border-b border-line last:border-b-0">
+                        <button
+                          type="button"
+                          onClick={() => setOpenSection(isOpen ? -1 : i)}
+                          className="flex w-full items-center justify-between bg-paper px-4 py-3 text-left"
+                        >
+                          <span className="text-[13.5px] font-semibold text-ink">{section.title}</span>
+                          <span className="text-[12px] text-ink-faint">{section.lectures.length} lectures</span>
+                        </button>
+                        {isOpen && (
+                          <div className="pb-1">
+                            {section.lectures.map((l) => {
+                              const active = l.id === lecture.id
+                              return (
+                                <Link
+                                  key={l.id}
+                                  to={`/learn/${course.id}/${l.id}`}
+                                  className={
+                                    "flex items-center gap-2.5 px-4 py-2.5 text-[13px] " +
+                                    (active ? "bg-brand-soft text-brand" : "text-ink-soft hover:bg-paper")
+                                  }
+                                >
+                                  <span
+                                    className={
+                                      "grid h-4 w-4 flex-none place-items-center rounded-sm border text-[9px] " +
+                                      (completed.has(l.id)
+                                        ? "border-teal bg-teal text-white"
+                                        : "border-line text-transparent")
+                                    }
+                                  >
+                                    ✓
+                                  </span>
+                                  <span className="min-w-0 flex-1 truncate">{l.title}</span>
+                                  {!l.videoUrl && <span className="flex-none text-[11px] text-ink-faint">soon</span>}
+                                  <span className="flex-none text-ink-faint">{l.minutes}m</span>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
               {tab === "Overview" && <p>{course.description}</p>}
-              {tab === "Q&A" && <p>No questions yet on this lecture — be the first to ask.</p>}
-              {tab === "Notes" && <p>Notes you take while watching will show up here.</p>}
+              {tab === "Q&A" && (
+                <div>
+                  <div className="flex gap-3">
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                      DH
+                    </span>
+                    <div className="flex-1">
+                      <textarea
+                        value={questionDraft}
+                        onChange={(e) => setQuestionDraft(e.target.value)}
+                        placeholder="Ask a question about this lecture"
+                        rows={2}
+                        className="w-full rounded-md border border-line bg-surface p-2.5 text-[13.5px] text-ink outline-none focus:border-brand"
+                      />
+                      <button
+                        type="button"
+                        disabled={!questionDraft.trim()}
+                        onClick={askQuestion}
+                        className="mt-2 rounded-md bg-brand px-3.5 py-1.5 text-[13px] font-semibold text-white transition disabled:opacity-40"
+                      >
+                        Post question
+                      </button>
+                    </div>
+                  </div>
+                  {questions.length > 0 ? (
+                    <div className="mt-5 flex flex-col gap-4 border-t border-line pt-4">
+                      {questions.map((q) => (
+                        <div key={q.id} className="flex gap-3">
+                          <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                            DH
+                          </span>
+                          <div>
+                            <p className="text-[13.5px] text-ink">{q.text}</p>
+                            <p className="mt-1 text-[12px] text-ink-faint">{q.date} · Dhinesh</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-[13px] text-ink-faint">
+                      No questions yet on this lecture — be the first to ask.
+                    </p>
+                  )}
+                </div>
+              )}
+              {tab === "Notes" && (
+                <div>
+                  <textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder="Take notes while you watch — saved automatically, just for you."
+                    rows={6}
+                    className="w-full rounded-md border border-line bg-surface p-3 text-[13.5px] text-ink outline-none focus:border-brand"
+                  />
+                  <p className="mt-1.5 text-[12px] text-ink-faint">
+                    Notes are private and saved on this device only.
+                  </p>
+                </div>
+              )}
               {tab === "Announcements" && <p>{course.instructor} hasn't posted any announcements yet.</p>}
               {tab === "Reviews" &&
                 (review ? (
@@ -326,61 +443,6 @@ export default function Learn() {
             </div>
           </div>
         </div>
-
-        {/* Curriculum sidebar */}
-        <aside className="flex-none border-t border-white/10 bg-[#1c1d1f] lg:w-90 lg:border-t-0 lg:border-l">
-          <p className="border-b border-white/10 px-4 py-3.5 text-[13.5px] font-bold text-white">
-            Course content
-          </p>
-          <div className="max-h-[70vh] overflow-y-auto">
-            {course.curriculum.map((section, i) => {
-              const isOpen = activeSection === i || openSection === i
-              return (
-                <div key={section.title} className="border-b border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setOpenSection(isOpen ? -1 : i)}
-                    className="flex w-full items-center justify-between px-4 py-3 text-left"
-                  >
-                    <span className="text-[13px] font-semibold text-white">{section.title}</span>
-                    <span className="text-[11px] text-white/50">{section.lectures.length}</span>
-                  </button>
-                  {isOpen && (
-                    <div className="pb-1">
-                      {section.lectures.map((l) => {
-                        const active = l.id === lecture.id
-                        return (
-                          <Link
-                            key={l.id}
-                            to={`/learn/${course.id}/${l.id}`}
-                            className={
-                              "flex items-center gap-2.5 px-4 py-2 text-[12.5px] " +
-                              (active ? "bg-brand/20 text-white" : "text-white/70 hover:text-white")
-                            }
-                          >
-                            <span
-                              className={
-                                "grid h-4 w-4 flex-none place-items-center rounded-sm border text-[9px] " +
-                                (completed.has(l.id)
-                                  ? "border-teal bg-teal text-white"
-                                  : "border-white/30 text-transparent")
-                              }
-                            >
-                              ✓
-                            </span>
-                            <span className="min-w-0 flex-1 truncate">{l.title}</span>
-                            {!l.videoUrl && <span className="flex-none text-[10px] text-white/30">soon</span>}
-                            <span className="flex-none text-white/40">{l.minutes}m</span>
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </aside>
       </div>
     </div>
   )
