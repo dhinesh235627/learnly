@@ -31,7 +31,7 @@ export default function Home() {
     return (
       <div className="flex min-h-svh flex-col">
         <PromoBanner />
-        <TopNav showCategories={false} />
+        <TopNav />
         <main className="flex-1 bg-paper">
           <div className="mx-auto max-w-6xl px-5 py-8">
             <p className="text-[14px] text-ink-soft">
@@ -67,7 +67,7 @@ export default function Home() {
     return (
       <div className="flex min-h-svh flex-col">
         <PromoBanner />
-        <TopNav showCategories={false} />
+        <TopNav />
         <main className="flex-1 bg-paper">
           <div className="mx-auto max-w-6xl px-5 py-8">
             <h1 className="text-[24px] font-bold text-ink">{category} courses</h1>
@@ -91,7 +91,7 @@ export default function Home() {
   return (
     <div className="flex min-h-svh flex-col">
       <PromoBanner />
-      <TopNav showCategories={false} />
+      <TopNav />
 
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-8">
