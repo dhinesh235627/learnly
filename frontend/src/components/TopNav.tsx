@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import AnimatedPopover from "./AnimatedPopover"
-import { categories } from "../data/courses"
 import { notifications } from "../data/notifications"
 import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
@@ -29,8 +28,6 @@ export default function TopNav() {
     await logout()
     navigate("/")
   }
-
-  const activeCategory = params.get("category")
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -186,21 +183,6 @@ export default function TopNav() {
             </Link>
           )}
         </div>
-      </div>
-
-      <div className="mx-auto flex max-w-6xl gap-7 overflow-x-auto px-5 pb-3">
-        {categories.map((cat) => (
-          <Link
-            key={cat}
-            to={activeCategory === cat ? "/home" : `/home?category=${encodeURIComponent(cat)}`}
-            className={
-              "whitespace-nowrap text-[15px] font-semibold " +
-              (activeCategory === cat ? "text-brand" : "text-ink-soft hover:text-ink")
-            }
-          >
-            {cat}
-          </Link>
-        ))}
       </div>
     </header>
   )

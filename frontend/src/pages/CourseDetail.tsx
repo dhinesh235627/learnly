@@ -7,6 +7,13 @@ import { allLectures, courseHours, courses, firstPlayableLecture } from "../data
 import { useCourseRating } from "../hooks/useCourseRating"
 import { useIdSet } from "../hooks/useIdSet"
 
+const HERO_BACKGROUNDS: Record<string, string> = {
+  "Microsoft Azure": "/logos/azure-hero.png",
+  AWS: "/logos/aws-hero.png",
+  "Google Cloud": "/logos/google-cloud-hero.png",
+  SAP: "/logos/sap-hero.png",
+}
+
 export default function CourseDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -41,8 +48,16 @@ export default function CourseDetail() {
       <TopNav />
 
       <main className="flex-1">
-        <section className="text-white" style={{ backgroundColor: course.color }}>
-          <div className="mx-auto max-w-6xl px-5 py-10">
+        <section className="relative overflow-hidden text-white" style={{ backgroundColor: course.color }}>
+          {HERO_BACKGROUNDS[course.category] && (
+            <img
+              src={HERO_BACKGROUNDS[course.category]}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-3 right-3 h-16 w-24 object-contain object-right mix-blend-multiply opacity-25 sm:h-20 sm:w-32 md:h-24 md:w-40"
+            />
+          )}
+          <div className="relative mx-auto max-w-6xl px-5 py-10">
             <p className="text-[12.5px] font-semibold uppercase tracking-wide text-white/80">
               {course.category}
             </p>
@@ -118,11 +133,6 @@ export default function CourseDetail() {
                               <span className="flex items-center gap-2">
                                 <span className={lecture.videoUrl ? "text-brand" : "text-ink-faint"}>▶</span>
                                 {lecture.title}
-                                {lecture.videoUrl && (
-                                  <span className="rounded bg-brand-soft px-1.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-brand">
-                                    Preview
-                                  </span>
-                                )}
                               </span>
                               <span className="text-[12px] text-ink-faint">{lecture.minutes}m</span>
                             </Link>

@@ -19,13 +19,19 @@ export default function ContinueLearningCard({ course }: { course: Course }) {
       className="flex w-95 flex-none overflow-hidden rounded-xl border border-line bg-surface shadow-sm hover:shadow-lg"
     >
       <div
-        className="group relative flex h-26 w-40 flex-none items-center justify-center"
-        style={{ backgroundColor: course.color }}
+        className="group relative flex h-26 w-40 flex-none items-center justify-center overflow-hidden"
+        style={{ background: `color-mix(in srgb, ${course.color} 10%, white)` }}
       >
+        <img
+          src={course.logo}
+          alt={course.category}
+          className="absolute left-2.5 top-2.5 h-5 max-w-[55%] object-contain object-left"
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1" style={{ backgroundColor: course.color }} />
         <motion.span
           whileHover={{ scale: 1.08 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          className="grid h-10 w-10 place-items-center rounded-full bg-white/90 text-[13px] text-ink"
+          className="grid h-10 w-10 place-items-center rounded-full bg-brand text-[13px] text-white shadow-md"
         >
           ▶
         </motion.span>

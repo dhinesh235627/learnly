@@ -3,8 +3,10 @@ import { Link, useSearchParams } from "react-router-dom"
 import Carousel from "../components/Carousel"
 import ContinueLearningCard from "../components/ContinueLearningCard"
 import CourseCard from "../components/CourseCard"
+import { CloudCircuitGlyph } from "../components/CourseThumbArt"
 import Footer from "../components/Footer"
 import PromoBanner from "../components/PromoBanner"
+import { ClockIcon, FlameIcon, PlayIcon, TrophyIcon } from "../components/StatIcons"
 import TopNav from "../components/TopNav"
 import { courseProgress, courses } from "../data/courses"
 import { useAuth } from "../hooks/useAuth"
@@ -101,66 +103,71 @@ export default function Home() {
 
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-8">
-          <div className="flex items-center gap-5">
-            <span className="grid h-16 w-16 flex-none place-items-center overflow-hidden rounded-full bg-ink font-display text-[18px] font-bold text-white">
-              {user?.picture ? (
-                <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-              ) : user ? (
-                initials(user.name)
-              ) : (
-                "?"
-              )}
-            </span>
-            <div>
-              <h1 className="text-[30px] font-bold text-ink">
-                {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
-              </h1>
-              {editingRole ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    setEditingRole(false)
-                  }}
-                  className="mt-1.5 flex items-center gap-2"
-                >
-                  <input
-                    autoFocus
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="rounded-md border border-line bg-surface px-2.5 py-1 text-[15px] text-ink outline-none focus:border-brand"
-                  />
-                  <button type="submit" className="text-[14px] font-semibold text-brand">
-                    Save
-                  </button>
-                </form>
-              ) : (
-                <p className="mt-1 text-[16px] text-ink-soft">
-                  {role} ·{" "}
-                  <button
-                    type="button"
-                    onClick={() => setEditingRole(true)}
-                    className="font-semibold text-brand underline"
-                  >
-                    Edit occupation and interests
-                  </button>
-                </p>
-              )}
-            </div>
-          </div>
+          <div className="hero-gradient relative overflow-hidden rounded-2xl px-5 py-5 text-white sm:px-7">
+            <CloudCircuitGlyph className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rotate-[-8deg] text-white/10" />
 
-          {/* Stats */}
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { label: "Courses in progress", value: stats.coursesInProgress },
-              { label: "Hours completed", value: `${stats.hoursCompleted}h` },
-              { label: "Day streak", value: stats.streakDays },
-              { label: "Certificates earned", value: stats.certificatesEarned },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-line bg-surface p-4">
-                <p className="font-mono text-[22px] font-bold text-ink">{s.value}</p>
-                <p className="mt-0.5 text-[12.5px] text-ink-soft">{s.label}</p>
+            <div className="relative flex items-center gap-4">
+              <span className="grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-full bg-white/15 font-display text-[15px] font-bold text-white ring-1 ring-inset ring-white/40">
+                {user?.picture ? (
+                  <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                ) : user ? (
+                  initials(user.name)
+                ) : (
+                  "?"
+                )}
+              </span>
+              <div>
+                <h1 className="text-[21px] font-bold text-white">
+                  {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+                </h1>
+                {editingRole ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      setEditingRole(false)
+                    }}
+                    className="mt-1 flex items-center gap-2"
+                  >
+                    <input
+                      autoFocus
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="rounded-md border border-line bg-surface px-2.5 py-1 text-[13.5px] text-ink outline-none focus:border-brand"
+                    />
+                    <button type="submit" className="text-[13px] font-semibold text-white underline">
+                      Save
+                    </button>
+                  </form>
+                ) : (
+                  <p className="mt-0.5 text-[13.5px] text-white/75">
+                    {role} ·{" "}
+                    <button
+                      type="button"
+                      onClick={() => setEditingRole(true)}
+                      className="font-semibold text-white underline"
+                    >
+                      Edit occupation and interests
+                    </button>
+                  </p>
+                )}
               </div>
-            ))}
+            </div>
+
+            {/* Stats */}
+            <div className="relative mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/15 pt-3">
+              {[
+                { label: "Courses in progress", value: stats.coursesInProgress, Icon: PlayIcon },
+                { label: "Hours completed", value: `${stats.hoursCompleted}h`, Icon: ClockIcon },
+                { label: "Day streak", value: stats.streakDays, Icon: FlameIcon },
+                { label: "Certificates earned", value: stats.certificatesEarned, Icon: TrophyIcon },
+              ].map((s) => (
+                <div key={s.label} className="flex items-center gap-1.5">
+                  <s.Icon className="h-3.5 w-3.5 text-white/60" />
+                  <span className="font-mono text-[14px] font-bold text-white">{s.value}</span>
+                  <span className="text-[12px] text-white/65">{s.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Continue learning */}

@@ -2,7 +2,14 @@ import { Link } from "react-router-dom"
 import CourseCard from "../components/CourseCard"
 import Footer from "../components/Footer"
 import MarketingNav from "../components/MarketingNav"
-import { categories, courses } from "../data/courses"
+import { courses } from "../data/courses"
+
+const categoryTiles = [
+  { category: "Microsoft Azure", image: "/images/tile-azure.jpg", color: "#0078D4" },
+  { category: "AWS", image: "/images/tile-aws.jpg", color: "#FF9900" },
+  { category: "Google Cloud", image: "/images/tile-gcp.jpg", color: "#4285F4" },
+  { category: "SAP", image: "/images/tile-sap.jpg", color: "#0FAAFF" },
+]
 
 export default function Landing() {
   return (
@@ -11,70 +18,77 @@ export default function Landing() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-line bg-surface">
-          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_1fr] md:items-center md:py-20">
-            <div>
-              <p className="mb-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
+        <section className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-dark">
+          <div className="mx-auto grid max-w-6xl items-center gap-0 px-5 py-10 md:grid-cols-2 md:gap-8 md:py-0">
+            <div className="relative z-10 max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
+              <p className="mb-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
                 Cloud &amp; enterprise skills
               </p>
-              <h1 className="text-[34px] font-extrabold leading-[1.1] text-ink sm:text-[44px]">
+              <h1 className="text-[26px] font-extrabold leading-[1.15] text-ink sm:text-[30px]">
                 Get certified on the platforms companies actually run on.
               </h1>
-              <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-ink-soft">
-                Learnly brings Microsoft Azure, AWS, Google Cloud, and SAP training into one
-                place — structured courses, hands-on labs, and certification prep taught by
-                practitioners.
+              <p className="mt-3 text-[14.5px] leading-relaxed text-ink-soft">
+                Microsoft Azure, AWS, Google Cloud, and SAP training in one place — structured
+                courses, hands-on labs, and certification prep taught by practitioners.
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Link
                   to="/login"
-                  className="rounded-md bg-brand px-6 py-3 text-[15px] font-semibold text-white transition hover:bg-brand-dark"
+                  className="rounded-md bg-brand px-6 py-3 text-[14.5px] font-bold text-white transition hover:bg-brand-dark"
                 >
                   Start learning free
                 </Link>
                 <Link
                   to="/home"
-                  className="rounded-md border border-line px-6 py-3 text-[15px] font-semibold text-ink transition hover:border-ink-soft"
+                  className="rounded-md border border-line px-6 py-3 text-[14.5px] font-bold text-ink transition hover:border-ink-soft"
                 >
                   Browse courses
                 </Link>
               </div>
-              <p className="mt-5 text-[13px] text-ink-faint">
-                Trusted by learners preparing for AZ-900, AWS SAA-C03, GCP ACE, and SAP S/4HANA
-                certifications.
-              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              {courses.map((c) => (
-                <div
-                  key={c.id}
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border border-line bg-paper p-6 text-center"
-                >
-                  <span
-                    className="grid h-12 w-12 place-items-center rounded-lg text-lg font-bold text-white"
-                    style={{ backgroundColor: c.color }}
-                  >
-                    {c.category[0]}
-                  </span>
-                  <p className="text-[13.5px] font-semibold text-ink">{c.category}</p>
-                </div>
-              ))}
+            <div className="relative -mx-5 h-[260px] overflow-hidden sm:h-[340px] md:mx-0 md:h-[420px] md:rounded-l-2xl">
+              <img
+                src="/images/landing-hero.jpg"
+                alt="Two learners reviewing a course together on a laptop"
+                className="h-full w-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/50 via-brand-dark/10 to-transparent md:from-brand-dark/40" />
             </div>
           </div>
         </section>
 
-        {/* Category strip */}
+        {/* Category tiles */}
         <section className="border-b border-line bg-paper">
-          <div className="mx-auto flex max-w-6xl flex-wrap gap-3 px-5 py-6">
-            {categories.map((cat) => (
-              <span
-                key={cat}
-                className="rounded-full border border-line bg-surface px-4 py-1.5 text-[13.5px] font-semibold text-ink-soft"
-              >
-                {cat}
-              </span>
-            ))}
+          <div className="mx-auto max-w-6xl px-5 py-14">
+            <h2 className="text-[26px] font-bold text-ink">
+              Learn essential <span className="font-script text-[34px] text-brand">cloud &amp; enterprise</span>{" "}
+              skills
+            </h2>
+            <p className="mt-1.5 max-w-lg text-[14.5px] text-ink-soft">
+              Learnly helps you build in-demand cloud skills fast and advance your career in a
+              changing job market.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {categoryTiles.map((tile) => (
+                <div
+                  key={tile.category}
+                  className="relative block h-48 overflow-hidden rounded-xl sm:h-56"
+                >
+                  <img src={tile.image} alt="" className="h-full w-full object-cover" />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(180deg, ${tile.color}22 0%, ${tile.color}dd 100%)`,
+                    }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-4">
+                    <span className="text-[14.5px] font-bold text-white">{tile.category}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

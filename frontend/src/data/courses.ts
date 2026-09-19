@@ -20,9 +20,16 @@ export type Course = {
   category: string
   bestseller?: boolean
   color: string
+  logo: string
+  rating: number
+  ratingCount: number
   description: string
+  about: string[]
+  requirements: string[]
+  instructorBio: string
   whatYouLearn: string[]
   curriculum: Section[]
+  announcements?: { date: string; text: string }[]
 }
 
 export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
@@ -46,8 +53,23 @@ export const courses: Course[] = [
     category: "Microsoft Azure",
     bestseller: true,
     color: "#0078D4",
+    logo: "/logos/azure.png",
+    rating: 4.8,
+    ratingCount: 2145,
     description:
       "A hands-on introduction to Microsoft Azure — cloud fundamentals, core resources, virtual machines, networking, storage, and CLI automation — built as a practical roadmap toward AZ-900 and AZ-104.",
+    about: [
+      "This course is a hands-on walkthrough of core Microsoft Azure services, built as a practical companion to the AZ-900 and AZ-104 exam objectives — not just theory, but the actual console clicks and CLI commands you'd use on the job.",
+      "You'll start with cloud computing fundamentals and Azure's global infrastructure, then move into resource groups, virtual machines (including deploying Jenkins on a VM), a full VNet architecture with firewalls, NSGs, and Bastion, and finish with storage services and CLI automation.",
+      "Every lecture is a real recorded session, not slides read aloud — expect terminal output, the Azure portal, and the occasional rough edge left in because that's how the tools actually behave.",
+    ],
+    requirements: [
+      "An active or free-tier Azure subscription (the free account covers everything used in this course)",
+      "Basic comfort with a command line — no prior cloud experience required",
+      "No prior Azure or AZ-900 knowledge assumed",
+    ],
+    instructorBio:
+      "Vishwaanth builds and ships this course's platform end to end, and teaches Azure the way he actually uses it day to day — resource groups, networking, and automation via the CLI.",
     whatYouLearn: [
       "Explain core cloud computing concepts and Azure's global infrastructure",
       "Deploy and manage Azure resources, resource groups, and virtual machines (including running Jenkins on an Azure VM)",
@@ -87,10 +109,16 @@ export const courses: Course[] = [
         ],
       },
     ],
+    announcements: [
+      {
+        date: "2026-09-10",
+        text: "Welcome to Microsoft Azure Basics! If you're following the AZ-900/AZ-104 roadmap, I'd recommend working through the networking section lectures back-to-back — they build directly on each other.",
+      },
+    ],
   },
   {
     id: "aws-solutions-architect",
-    title: "AWS Certified Solutions Architect — Associate 2026",
+    title: "AWS for Spring Boot Developers: EC2, S3, RDS, DynamoDB & Beanstalk",
     instructor: "Marcus Webb",
     price: 599,
     originalPrice: 3499,
@@ -98,50 +126,65 @@ export const courses: Course[] = [
     category: "AWS",
     bestseller: true,
     color: "#FF9900",
+    logo: "/logos/aws.png",
+    rating: 4.7,
+    ratingCount: 1832,
     description:
-      "Hands-on labs across EC2, VPC, S3, and IAM to prepare you for the SAA-C03 exam and real-world architecture reviews.",
+      "A hands-on, project-based walkthrough of deploying real Spring Boot and Angular applications on AWS — EC2, S3, RDS, DynamoDB, Elastic Beanstalk, Secrets Manager, and SQS.",
+    about: [
+      "A project-based walkthrough of deploying real Spring Boot and Angular applications on AWS — not exam-prep slides, actual console work and command-line deployments.",
+      "You'll launch EC2 instances, deploy to Elastic Beanstalk, connect applications to RDS and DynamoDB, manage credentials with Secrets Manager, and wire up SQS messaging — the same services you'd reach for building a real product on AWS.",
+      "By the end, you'll have deployed a full-stack Spring Boot + Angular + MySQL application end to end on AWS infrastructure, not just clicked through a single toy example.",
+    ],
+    requirements: [
+      "An AWS account (the Free Tier covers everything used in this course)",
+      "Basic Java/Spring Boot familiarity is helpful but not required to follow along",
+      "Comfort with the command line",
+    ],
+    instructorBio:
+      "Marcus Webb focuses on practical, deployment-first AWS training — less exam trivia, more \"here's how you'd actually ship this.\"",
     whatYouLearn: [
-      "Design highly available, cost-optimized AWS architectures",
-      "Configure VPCs, subnets, and security groups",
-      "Choose the right storage and database service for a workload",
-      "Apply the AWS Well-Architected Framework",
+      "Launch and configure EC2 instances for a live application",
+      "Deploy Spring Boot and Angular apps to Elastic Beanstalk and S3",
+      "Connect applications to RDS (MySQL) and DynamoDB",
+      "Manage credentials with Secrets Manager and integrate SQS messaging",
     ],
     curriculum: [
       {
-        title: "IAM & Account Security",
+        title: "Getting Started",
         lectures: [
-          { id: "aws-shared-responsibility", title: "Understanding the Shared Responsibility Model", minutes: 9 },
-          { id: "aws-iam-policies", title: "IAM Users, Groups & Policies", minutes: 14 },
-          { id: "aws-mfa", title: "Multi-Factor Authentication & Root Account Security", minutes: 11 },
+          { id: "aws-01-intro", title: "What is AWS? Amazon Cloud Services Tutorial", minutes: 9, videoUrl: qaVideo("aws-01-intro.mp4") },
         ],
       },
       {
-        title: "Compute & Networking (EC2, VPC)",
+        title: "Compute & Deployment",
         lectures: [
-          { id: "aws-ec2-types", title: "EC2 Instance Types & Pricing Models", minutes: 12 },
-          {
-            id: "aws-vpc-architecture",
-            title: "Designing Resilient VPC Architectures",
-            minutes: 22,
-            videoUrl: "/videos/aws.mp4",
-          },
-          { id: "aws-sg-vs-nacl", title: "Security Groups vs. Network ACLs", minutes: 10 },
-          { id: "aws-elb-asg", title: "Elastic Load Balancing & Auto Scaling", minutes: 15 },
+          { id: "aws-02-ec2-instance", title: "Create an EC2 Instance in AWS — Step by Step", minutes: 8, videoUrl: qaVideo("aws-02-ec2-instance.mp4") },
+          { id: "aws-03-ec2-s3-deploy", title: "Deploy a Spring Boot Application on AWS Using EC2 & S3", minutes: 18, videoUrl: qaVideo("aws-03-ec2-s3-deploy.mp4") },
+          { id: "aws-04-beanstalk-tomcat", title: "Deploy Spring Boot Applications with AWS Elastic Beanstalk (Tomcat)", minutes: 9, videoUrl: qaVideo("aws-04-beanstalk-tomcat.mp4") },
         ],
       },
       {
-        title: "Storage & Databases",
+        title: "Databases & Storage",
         lectures: [
-          { id: "aws-s3-classes", title: "S3 Storage Classes & Lifecycle Rules", minutes: 13 },
-          { id: "aws-rds", title: "RDS Multi-AZ vs. Read Replicas", minutes: 14 },
-          { id: "aws-storage-choice", title: "Choosing Between EBS, EFS & Instance Store", minutes: 11 },
+          { id: "aws-05-rds-mysql", title: "Amazon RDS — Deploy a Spring Boot + MySQL CRUD App to Elastic Beanstalk", minutes: 15, videoUrl: qaVideo("aws-05-rds-mysql.mp4") },
+          { id: "aws-06-dynamodb", title: "AWS DynamoDB — Spring Boot CRUD Example on Elastic Beanstalk", minutes: 34, videoUrl: qaVideo("aws-06-dynamodb.mp4") },
+          { id: "aws-07-angular-s3", title: "Deploy an Angular Application to AWS S3", minutes: 7, videoUrl: qaVideo("aws-07-angular-s3.mp4") },
         ],
       },
       {
-        title: "SAA-C03 Practice Exam",
+        title: "Advanced Integration",
         lectures: [
-          { id: "aws-practice-exam", title: "Practice Exam Walkthrough: Scenario Questions", minutes: 25 },
+          { id: "aws-08-secrets-manager", title: "Manage Credentials Securely with AWS Secrets Manager & RDS", minutes: 27, videoUrl: qaVideo("aws-08-secrets-manager.mp4") },
+          { id: "aws-09-sqs", title: "Spring Cloud AWS — Amazon Simple Queue Service (SQS) with Spring Boot", minutes: 19, videoUrl: qaVideo("aws-09-sqs.mp4") },
+          { id: "aws-10-fullstack-beanstalk", title: "Full-Stack Deployment: Spring Boot + Angular + MySQL on AWS (Beanstalk, S3, RDS)", minutes: 21, videoUrl: qaVideo("aws-10-fullstack-beanstalk.mp4") },
         ],
+      },
+    ],
+    announcements: [
+      {
+        date: "2026-09-15",
+        text: "New lectures on Elastic Beanstalk and Secrets Manager are now live — check the updated Course content tab.",
       },
     ],
   },
@@ -154,8 +197,23 @@ export const courses: Course[] = [
     level: "Intermediate",
     category: "Google Cloud",
     color: "#4285F4",
+    logo: "/logos/google-cloud.png",
+    rating: 4.6,
+    ratingCount: 945,
     description:
       "Deploy and manage workloads on Google Cloud using the Console, gcloud CLI, and Cloud Shell — aligned to the ACE exam.",
+    about: [
+      "Deploy and manage real workloads on Google Cloud using the Console, the gcloud CLI, and Cloud Shell — structured around the Associate Cloud Engineer exam guide.",
+      "You'll cover project setup and IAM, Compute Engine and GKE, serverless deployment with Cloud Run, and the core networking and storage services you'll be tested on and actually use.",
+      "Each section pairs a short concept explanation with a hands-on task in the Console or CLI, so you're building muscle memory, not just recognizing terms.",
+    ],
+    requirements: [
+      "A Google Cloud account (the free trial credit is enough to follow along)",
+      "No prior GCP experience required",
+      "Basic comfort with a terminal for the gcloud CLI sections",
+    ],
+    instructorBio:
+      "Mei Lin Tan teaches Google Cloud fundamentals with an emphasis on the tools you'll actually use day to day — Console, gcloud, and Cloud Shell.",
     whatYouLearn: [
       "Set up a GCP project, billing, and IAM roles",
       "Deploy Compute Engine, GKE, and Cloud Run workloads",
@@ -192,6 +250,12 @@ export const courses: Course[] = [
         ],
       },
     ],
+    announcements: [
+      {
+        date: "2026-09-05",
+        text: "Thanks for enrolling in the Associate Cloud Engineer track — I'm putting together additional VPC networking labs, stay tuned for an update.",
+      },
+    ],
   },
   {
     id: "sap-s4hana-fundamentals",
@@ -202,8 +266,22 @@ export const courses: Course[] = [
     level: "All Levels",
     category: "SAP",
     color: "#0FAAFF",
+    logo: "/logos/sap.png",
+    rating: 4.5,
+    ratingCount: 612,
     description:
       "A business-process view of SAP S/4HANA — finance, procurement, and supply chain — for professionals working alongside SAP teams.",
+    about: [
+      "A business-process view of SAP S/4HANA — finance, procurement, and supply chain — built for professionals who work alongside SAP teams rather than configure the system themselves.",
+      "You'll navigate the Fiori launchpad, understand how organizational structures map to configuration, and walk through real finance and procurement processes end to end, finishing with a case study that ties it all together.",
+      "This isn't a developer-focused ABAP course — it's aimed at business stakeholders who need to speak confidently with SAP implementation teams.",
+    ],
+    requirements: [
+      "No SAP experience required — this course is written for business professionals, not developers",
+      "General familiarity with business processes (finance, procurement, or supply chain) is helpful but not required",
+    ],
+    instructorBio:
+      "Ingrid Voss brings a business-process lens to SAP training, focused on how the system supports real finance and procurement workflows rather than technical configuration.",
     whatYouLearn: [
       "Navigate the SAP Fiori launchpad and core modules",
       "Understand S/4HANA finance and procurement processes",
@@ -237,6 +315,12 @@ export const courses: Course[] = [
         lectures: [
           { id: "sap-case-study", title: "End-to-End Case Study Walkthrough", minutes: 20 },
         ],
+      },
+    ],
+    announcements: [
+      {
+        date: "2026-08-28",
+        text: "Welcome! Quick note: the case study in the final section assumes you're already comfortable navigating the SAP Fiori launchpad from Section 1.",
       },
     ],
   },

@@ -7,7 +7,7 @@ export default function Business() {
     <div className="flex min-h-svh flex-col">
       <TopNav />
       <main className="flex-1">
-        <section className="border-b border-line" style={{ backgroundColor: "#0078D4" }}>
+        <section className="hero-gradient border-b border-line">
           <div className="mx-auto max-w-4xl px-5 py-16 text-center text-white">
             <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-white/80">
               For teams
@@ -19,7 +19,7 @@ export default function Business() {
             </p>
             <button
               type="button"
-              className="mt-6 rounded-md bg-white px-6 py-3 text-[14.5px] font-semibold text-ink hover:bg-white/90"
+              className="mt-6 rounded-md bg-white px-6 py-3 text-[14.5px] font-semibold text-brand-dark hover:bg-paper"
             >
               Request a demo
             </button>
