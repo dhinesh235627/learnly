@@ -1,22 +1,42 @@
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import TopNav from "../components/TopNav"
+import { useAuth } from "../hooks/useAuth"
 import { useLearningStats } from "../hooks/useLearningStats"
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts.slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+}
 
 export default function Profile() {
   const stats = useLearningStats()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    await logout()
+    navigate("/")
+  }
+
   return (
     <div className="flex min-h-svh flex-col">
       <TopNav />
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-2xl px-5 py-10">
           <div className="flex items-center gap-4">
-            <span className="grid h-16 w-16 place-items-center rounded-full bg-ink font-display text-[18px] font-bold text-white">
-              DH
+            <span className="grid h-16 w-16 flex-none place-items-center overflow-hidden rounded-full bg-ink font-display text-[18px] font-bold text-white">
+              {user?.picture ? (
+                <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+              ) : user ? (
+                initials(user.name)
+              ) : (
+                "?"
+              )}
             </span>
             <div>
-              <h1 className="text-[20px] font-bold text-ink">Dhinesh</h1>
-              <p className="text-[13.5px] text-ink-faint">dhinesh.ad@aivisualz.com</p>
+              <h1 className="text-[20px] font-bold text-ink">{user?.name ?? "Not signed in"}</h1>
+              <p className="text-[13.5px] text-ink-faint">{user?.email ?? ""}</p>
             </div>
           </div>
 
@@ -52,12 +72,13 @@ export default function Profile() {
             </div>
           </div>
 
-          <Link
-            to="/"
+          <button
+            type="button"
+            onClick={handleLogout}
             className="mt-8 inline-block rounded-md border border-line px-5 py-2.5 text-[14px] font-semibold text-ink hover:border-ink-soft"
           >
             Log out
-          </Link>
+          </button>
         </div>
       </main>
       <Footer />

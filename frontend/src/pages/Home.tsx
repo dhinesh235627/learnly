@@ -7,13 +7,21 @@ import Footer from "../components/Footer"
 import PromoBanner from "../components/PromoBanner"
 import TopNav from "../components/TopNav"
 import { courseProgress, courses } from "../data/courses"
+import { useAuth } from "../hooks/useAuth"
 import { useLearningStats } from "../hooks/useLearningStats"
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts.slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+}
 
 export default function Home() {
   const [params] = useSearchParams()
   const [editingRole, setEditingRole] = useState(false)
   const [role, setRole] = useState("Cloud & Platform Engineer")
   const stats = useLearningStats()
+  const { user } = useAuth()
+  const firstName = user?.name?.split(" ")[0]
   const inProgress = courses.filter((c) => {
     const { done, total } = courseProgress(c, stats.completed.ids)
     return done > 0 && done < total
@@ -94,11 +102,19 @@ export default function Home() {
       <main className="flex-1 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-8">
           <div className="flex items-center gap-5">
-            <span className="grid h-16 w-16 flex-none place-items-center rounded-full bg-ink font-display text-[18px] font-bold text-white">
-              DH
+            <span className="grid h-16 w-16 flex-none place-items-center overflow-hidden rounded-full bg-ink font-display text-[18px] font-bold text-white">
+              {user?.picture ? (
+                <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+              ) : user ? (
+                initials(user.name)
+              ) : (
+                "?"
+              )}
             </span>
             <div>
-              <h1 className="text-[30px] font-bold text-ink">Welcome back, Dhinesh</h1>
+              <h1 className="text-[30px] font-bold text-ink">
+                {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+              </h1>
               {editingRole ? (
                 <form
                   onSubmit={(e) => {

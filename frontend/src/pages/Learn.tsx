@@ -5,6 +5,7 @@ import StarRating from "../components/StarRating"
 import { adjacentLecture, allLectures, courseProgress, courses, findLecture } from "../data/courses"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
+import { useAuth } from "../hooks/useAuth"
 import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
 
@@ -31,6 +32,11 @@ export default function Learn() {
 
   const { rating, rate } = useCourseRating(courseId ?? "")
   const { review, submit } = useCourseReview(courseId ?? "")
+  const { user } = useAuth()
+  const reviewerName = user?.name ?? "You"
+  const reviewerInitials = user?.name
+    ? user.name.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+    : "?"
 
   const lecture = course && lectureId ? findLecture(course, lectureId) : undefined
 
@@ -299,8 +305,12 @@ export default function Learn() {
               {tab === "Reviews" &&
                 (review ? (
                   <div className="flex gap-3">
-                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
-                      DH
+                    <span className="grid h-9 w-9 flex-none place-items-center overflow-hidden rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                      {user?.picture ? (
+                        <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        reviewerInitials
+                      )}
                     </span>
                     <div>
                       <p className="text-amber-500" aria-hidden="true">
@@ -310,7 +320,7 @@ export default function Learn() {
                       <p className="mt-1 text-[13.5px] text-ink">
                         {review.text || "No written feedback left."}
                       </p>
-                      <p className="mt-1 text-[12px] text-ink-faint">{review.date} · Dhinesh</p>
+                      <p className="mt-1 text-[12px] text-ink-faint">{review.date} · {reviewerName}</p>
                     </div>
                   </div>
                 ) : (
