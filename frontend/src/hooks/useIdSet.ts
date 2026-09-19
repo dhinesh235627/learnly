@@ -42,7 +42,8 @@ export function useIdSet(key: string) {
   }
 
   function toggle(id: string) {
-    ids.includes(id) ? remove(id) : add(id)
+    if (ids.includes(id)) remove(id)
+    else add(id)
   }
 
   return { ids, has: (id: string) => ids.includes(id), add, remove, toggle }
