@@ -52,10 +52,14 @@ export default function Cart() {
                     className="flex items-center gap-4 rounded-xl border border-line bg-surface p-4"
                   >
                     <span
-                      className="grid h-16 w-24 flex-none place-items-center rounded-lg text-[12px] font-bold text-white"
-                      style={{ backgroundColor: c.color }}
+                      className="relative grid h-16 w-24 flex-none place-items-center overflow-hidden rounded-lg"
+                      style={{ background: `color-mix(in srgb, ${c.color} 10%, white)` }}
                     >
-                      {c.category}
+                      <img src={c.logo} alt={c.category} className="h-7 max-w-[70%] object-contain" />
+                      <span
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-1"
+                        style={{ backgroundColor: c.color }}
+                      />
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="line-clamp-1 text-[14px] font-semibold text-ink">{c.title}</p>
