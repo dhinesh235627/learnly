@@ -33,7 +33,7 @@ export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
 // from the Video service once playback auth exists (Phase 2).
 const QA_VIDEO_BASE = "https://stlearnlyqa4127.blob.core.windows.net/videos"
 const QA_VIDEO_SAS = import.meta.env.VITE_QA_VIDEO_SAS ?? ""
-const qaVideo = (blobName: string) => `${QA_VIDEO_BASE}/${blobName}${QA_VIDEO_SAS}`
+const qaVideo = (blobName: string) => `${QA_VIDEO_BASE}/${blobName}?${QA_VIDEO_SAS}`
 
 export const courses: Course[] = [
   {
