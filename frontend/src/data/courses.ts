@@ -20,6 +20,9 @@ export type Course = {
   category: string
   bestseller?: boolean
   color: string
+  logo: string
+  rating: number
+  ratingCount: number
   description: string
   whatYouLearn: string[]
   curriculum: Section[]
@@ -46,6 +49,9 @@ export const courses: Course[] = [
     category: "Microsoft Azure",
     bestseller: true,
     color: "#0078D4",
+    logo: "/logos/azure.png",
+    rating: 4.8,
+    ratingCount: 2145,
     description:
       "A hands-on introduction to Microsoft Azure — cloud fundamentals, core resources, virtual machines, networking, storage, and CLI automation — built as a practical roadmap toward AZ-900 and AZ-104.",
     whatYouLearn: [
@@ -98,6 +104,9 @@ export const courses: Course[] = [
     category: "AWS",
     bestseller: true,
     color: "#FF9900",
+    logo: "/logos/aws.png",
+    rating: 4.7,
+    ratingCount: 1832,
     description:
       "Hands-on labs across EC2, VPC, S3, and IAM to prepare you for the SAA-C03 exam and real-world architecture reviews.",
     whatYouLearn: [
@@ -154,6 +163,9 @@ export const courses: Course[] = [
     level: "Intermediate",
     category: "Google Cloud",
     color: "#4285F4",
+    logo: "/logos/google-cloud.png",
+    rating: 4.6,
+    ratingCount: 945,
     description:
       "Deploy and manage workloads on Google Cloud using the Console, gcloud CLI, and Cloud Shell — aligned to the ACE exam.",
     whatYouLearn: [
@@ -202,6 +214,9 @@ export const courses: Course[] = [
     level: "All Levels",
     category: "SAP",
     color: "#0FAAFF",
+    logo: "/logos/sap.png",
+    rating: 4.5,
+    ratingCount: 612,
     description:
       "A business-process view of SAP S/4HANA — finance, procurement, and supply chain — for professionals working alongside SAP teams.",
     whatYouLearn: [

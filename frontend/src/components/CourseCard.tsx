@@ -1,19 +1,9 @@
 import { motion } from "motion/react"
 import { courseHours, courseProgress } from "../data/courses"
 import type { Course } from "../data/courses"
-import { useCourseRating } from "../hooks/useCourseRating"
 import { useIdSet } from "../hooks/useIdSet"
 import { CategoryGlyph, thumbGradient } from "./CourseThumbArt"
-
-function initials(title: string) {
-  return title
-    .split(" ")
-    .filter((w) => w.length > 2 || /[A-Z]/.test(w[0]))
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase()
-}
+import RatingStars from "./RatingStars"
 
 export default function CourseCard({
   course,
@@ -23,7 +13,6 @@ export default function CourseCard({
   showProgress?: boolean
 }) {
   const discount = Math.round((1 - course.price / course.originalPrice) * 100)
-  const { rating } = useCourseRating(course.id)
   const wishlist = useIdSet("learnly:wishlist")
   const wishlisted = wishlist.has(course.id)
   const completed = useIdSet("learnly:completed")
@@ -66,8 +55,8 @@ export default function CourseCard({
           {wishlisted ? "♥" : "♡"}
         </motion.button>
 
-        <span className="relative grid h-12 w-12 place-items-center rounded-full bg-white/15 text-[15px] font-bold text-white ring-1 ring-inset ring-white/40 backdrop-blur-sm">
-          {initials(course.title)}
+        <span className="relative grid h-14 w-24 place-items-center rounded-lg bg-white/95 px-3 shadow-md backdrop-blur-sm">
+          <img src={course.logo} alt={course.category} className="h-7 w-full object-contain" />
         </span>
       </div>
 
@@ -91,18 +80,11 @@ export default function CourseCard({
           </div>
         ) : (
           <>
-            {rating ? (
-              <div className="flex items-center gap-1.5">
-                <span className="text-[13px] font-bold text-amber-700">{rating.toFixed(1)}</span>
-                <span className="text-amber-500" aria-hidden="true">
-                  {"★".repeat(rating)}
-                  {"☆".repeat(5 - rating)}
-                </span>
-                <span className="text-[12px] text-ink-faint">(your rating)</span>
-              </div>
-            ) : (
-              <p className="text-[12px] text-ink-faint">No ratings yet</p>
-            )}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[13px] font-bold text-[#B45900]">{course.rating.toFixed(1)}</span>
+              <RatingStars rating={course.rating} />
+              <span className="text-[12px] text-ink-faint">({course.ratingCount.toLocaleString()})</span>
+            </div>
             <p className="text-[12px] text-ink-faint">
               {courseHours(course)}h total · {course.level}
             </p>
