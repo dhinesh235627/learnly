@@ -6,7 +6,6 @@ import { adjacentLecture, allLectures, courseProgress, courses, findLecture } fr
 import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
-import { useAuth } from "../hooks/useAuth"
 import { useCourseReminder } from "../hooks/useCourseReminder"
 import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
@@ -38,7 +37,7 @@ export default function Learn() {
 
   const { rating, rate } = useCourseRating(courseId ?? "")
   const { review, submit } = useCourseReview(courseId ?? "")
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const reviewerName = user?.name ?? "You"
   const reviewerInitials = user?.name
     ? user.name.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join("").toUpperCase()
@@ -46,7 +45,6 @@ export default function Learn() {
   const { text: noteText, setText: setNoteText } = useLectureNotes(lectureId ?? "")
   const { questions, ask } = useLectureQuestions(lectureId ?? "")
   const { reminder, permission, setReminder, clearReminder } = useCourseReminder(courseId ?? "", course?.title ?? "")
-  const { user, loading: authLoading } = useAuth()
 
   const lecture = course && lectureId ? findLecture(course, lectureId) : undefined
 
