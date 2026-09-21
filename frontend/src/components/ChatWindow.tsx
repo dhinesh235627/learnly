@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { CHAT_DISCLAIMER, CHAT_OPTIONS, CHAT_SUBTITLE, CHAT_WELCOME, matchReply, type ChatOption } from "../data/chatOptions"
+import { sendMessage } from "../lib/chatApi"
 
 type Message = { from: "bot" | "user"; text: string }
 
@@ -10,25 +11,40 @@ function now() {
 export default function ChatWindow({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([{ from: "bot", text: `${CHAT_WELCOME}\n${CHAT_SUBTITLE}` }])
   const [draft, setDraft] = useState("")
+  const [sending, setSending] = useState(false)
   const [sentAt] = useState(now)
+  const conversationId = useRef<string | undefined>(undefined)
   const bodyRef = useRef<HTMLDivElement>(null)
 
   const started = messages.length > 1
 
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: "smooth" })
-  }, [messages])
+  }, [messages, sending])
 
   function handleOption(option: ChatOption) {
+    // Quick replies stay canned and free — only typed messages hit the paid agent.
     setMessages((m) => [...m, { from: "user", text: option.label }, { from: "bot", text: option.reply }])
   }
 
-  function handleSend(e: React.FormEvent) {
+  async function handleSend(e: React.FormEvent) {
     e.preventDefault()
     const text = draft.trim()
-    if (!text) return
-    setMessages((m) => [...m, { from: "user", text }, { from: "bot", text: matchReply(text) }])
+    if (!text || sending) return
+
+    setMessages((m) => [...m, { from: "user", text }])
     setDraft("")
+    setSending(true)
+
+    try {
+      const result = await sendMessage(text, conversationId.current)
+      conversationId.current = result.conversationId
+      setMessages((m) => [...m, { from: "bot", text: result.reply }])
+    } catch {
+      setMessages((m) => [...m, { from: "bot", text: matchReply(text) }])
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -79,6 +95,16 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
                 </div>
               ),
             )}
+            {sending && (
+              <div className="flex items-start gap-2">
+                <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-brand text-[11px] font-bold text-white">
+                  L
+                </span>
+                <div className="rounded-2xl rounded-tl-sm bg-paper px-3.5 py-2.5 text-[13.5px] text-ink-faint">
+                  Typing…
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -105,12 +131,13 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Type a message…"
-            className="flex-1 rounded-full border border-line bg-paper px-3.5 py-2 text-[13px] text-ink outline-none focus:border-brand"
+            disabled={sending}
+            className="flex-1 rounded-full border border-line bg-paper px-3.5 py-2 text-[13px] text-ink outline-none focus:border-brand disabled:opacity-60"
           />
           <button
             type="submit"
             aria-label="Send message"
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || sending}
             className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand text-[14px] text-white transition hover:bg-brand-dark disabled:opacity-40"
           >
             ➤

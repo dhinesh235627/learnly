@@ -1,7 +1,17 @@
-// Reserved for real chatbot backend integration (see backend/src/functions/chat.js).
-// The widget is currently static — quick replies use canned responses from
-// data/chatOptions.ts and never call this. Wire it in once there's a real
-// chat backend to talk to.
-export async function sendMessage(_text: string): Promise<string> {
-  throw new Error("chatApi.sendMessage is not implemented yet")
+import { API_BASE } from "./api"
+
+export type ChatReply = { reply: string; conversationId: string }
+
+export async function sendMessage(text: string, conversationId?: string): Promise<ChatReply> {
+  const res = await fetch(`${API_BASE}/api/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text, conversationId }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`chat request failed: ${res.status}`)
+  }
+
+  return res.json() as Promise<ChatReply>
 }
