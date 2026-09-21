@@ -4,13 +4,6 @@ import Footer from "../components/Footer"
 import MarketingNav from "../components/MarketingNav"
 import { courses } from "../data/courses"
 
-const categoryTiles = [
-  { category: "Microsoft Azure", image: "/images/tile-azure.jpg", color: "#0078D4" },
-  { category: "AWS", image: "/images/tile-aws.jpg", color: "#FF9900" },
-  { category: "Google Cloud", image: "/images/tile-gcp.jpg", color: "#4285F4" },
-  { category: "SAP", image: "/images/tile-sap.jpg", color: "#0FAAFF" },
-]
-
 export default function Landing() {
   return (
     <div className="flex min-h-svh flex-col">
@@ -53,7 +46,7 @@ export default function Landing() {
                 alt="Two learners reviewing a course together on a laptop"
                 className="h-full w-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/50 via-brand-dark/10 to-transparent md:from-brand-dark/40" />
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/25 to-transparent" />
             </div>
           </div>
         </section>
@@ -70,22 +63,19 @@ export default function Landing() {
               changing job market.
             </p>
 
-            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {categoryTiles.map((tile) => (
-                <div
-                  key={tile.category}
-                  className="relative block h-48 overflow-hidden rounded-xl sm:h-56"
-                >
-                  <img src={tile.image} alt="" className="h-full w-full object-cover" />
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {courses.map((course) => (
+                <div key={course.id} className="rounded-xl border border-line bg-surface p-5">
                   <div
-                    className="absolute inset-0"
-                    style={{
-                      background: `linear-gradient(180deg, ${tile.color}22 0%, ${tile.color}dd 100%)`,
-                    }}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-4">
-                    <span className="text-[14.5px] font-bold text-white">{tile.category}</span>
+                    className="flex h-16 items-center justify-center rounded-lg"
+                    style={{ background: `color-mix(in srgb, ${course.color} 10%, white)` }}
+                  >
+                    <img src={course.logo} alt={course.category} className="h-8 max-w-[70%] object-contain" />
                   </div>
+                  <h3 className="mt-4 text-[15px] font-bold text-ink">{course.category}</h3>
+                  <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-soft">
+                    {course.description}
+                  </p>
                 </div>
               ))}
             </div>
