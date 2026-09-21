@@ -9,13 +9,21 @@ import PromoBanner from "../components/PromoBanner"
 import { ClockIcon, FlameIcon, PlayIcon, TrophyIcon } from "../components/StatIcons"
 import TopNav from "../components/TopNav"
 import { courseProgress, courses } from "../data/courses"
+import { useAuth } from "../hooks/useAuth"
 import { useLearningStats } from "../hooks/useLearningStats"
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts.slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+}
 
 export default function Home() {
   const [params] = useSearchParams()
   const [editingRole, setEditingRole] = useState(false)
   const [role, setRole] = useState("Cloud & Platform Engineer")
   const stats = useLearningStats()
+  const { user } = useAuth()
+  const firstName = user?.name?.split(" ")[0]
   const inProgress = courses.filter((c) => {
     const { done, total } = courseProgress(c, stats.completed.ids)
     return done > 0 && done < total
@@ -99,11 +107,19 @@ export default function Home() {
             <CloudCircuitGlyph className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rotate-[-8deg] text-white/10" />
 
             <div className="relative flex items-center gap-4">
-              <span className="grid h-12 w-12 flex-none place-items-center rounded-full bg-white/15 font-display text-[15px] font-bold text-white ring-1 ring-inset ring-white/40">
-                DH
+              <span className="grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-full bg-white/15 font-display text-[15px] font-bold text-white ring-1 ring-inset ring-white/40">
+                {user?.picture ? (
+                  <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                ) : user ? (
+                  initials(user.name)
+                ) : (
+                  "?"
+                )}
               </span>
               <div>
-                <h1 className="text-[21px] font-bold text-white">Welcome back, Dhinesh</h1>
+                <h1 className="text-[21px] font-bold text-white">
+                  {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+                </h1>
                 {editingRole ? (
                   <form
                     onSubmit={(e) => {

@@ -6,6 +6,7 @@ import { adjacentLecture, allLectures, courseProgress, courses, findLecture } fr
 import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
+import { useAuth } from "../hooks/useAuth"
 import { useCourseReminder } from "../hooks/useCourseReminder"
 import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
@@ -37,6 +38,11 @@ export default function Learn() {
 
   const { rating, rate } = useCourseRating(courseId ?? "")
   const { review, submit } = useCourseReview(courseId ?? "")
+  const { user } = useAuth()
+  const reviewerName = user?.name ?? "You"
+  const reviewerInitials = user?.name
+    ? user.name.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join("").toUpperCase()
+    : "?"
   const { text: noteText, setText: setNoteText } = useLectureNotes(lectureId ?? "")
   const { questions, ask } = useLectureQuestions(lectureId ?? "")
   const { reminder, permission, setReminder, clearReminder } = useCourseReminder(courseId ?? "", course?.title ?? "")
@@ -508,12 +514,16 @@ export default function Learn() {
                     <div className="mt-5 flex flex-col gap-4 border-t border-line pt-4">
                       {questions.map((q) => (
                         <div key={q.id} className="flex gap-3">
-                          <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
-                            DH
+                          <span className="grid h-9 w-9 flex-none place-items-center overflow-hidden rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                            {user?.picture ? (
+                              <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                            ) : (
+                              reviewerInitials
+                            )}
                           </span>
                           <div>
                             <p className="text-[13.5px] text-ink">{q.text}</p>
-                            <p className="mt-1 text-[12px] text-ink-faint">{q.date} · Dhinesh</p>
+                            <p className="mt-1 text-[12px] text-ink-faint">{q.date} · {reviewerName}</p>
                           </div>
                         </div>
                       ))}
@@ -566,8 +576,12 @@ export default function Learn() {
               {tab === "Reviews" &&
                 (review ? (
                   <div className="flex gap-3">
-                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-brand-soft text-[12px] font-bold text-brand">
-                      DH
+                    <span className="grid h-9 w-9 flex-none place-items-center overflow-hidden rounded-full bg-brand-soft text-[12px] font-bold text-brand">
+                      {user?.picture ? (
+                        <img src={user.picture} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        reviewerInitials
+                      )}
                     </span>
                     <div>
                       <p className="text-amber-500" aria-hidden="true">
@@ -577,7 +591,7 @@ export default function Learn() {
                       <p className="mt-1 text-[13.5px] text-ink">
                         {review.text || "No written feedback left."}
                       </p>
-                      <p className="mt-1 text-[12px] text-ink-faint">{review.date} · Dhinesh</p>
+                      <p className="mt-1 text-[12px] text-ink-faint">{review.date} · {reviewerName}</p>
                     </div>
                   </div>
                 ) : (
