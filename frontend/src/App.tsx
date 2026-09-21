@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom"
+import ChatWidget from "./components/ChatWidget"
 import Business from "./pages/Business"
 import Cart from "./pages/Cart"
 import CourseDetail from "./pages/CourseDetail"
@@ -12,18 +13,21 @@ import Wishlist from "./pages/Wishlist"
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/course/:id" element={<CourseDetail />} />
-      <Route path="/learn/:courseId/:lectureId" element={<Learn />} />
-      <Route path="/wishlist" element={<Wishlist />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/teach" element={<Teach />} />
-      <Route path="/business" element={<Business />} />
-      <Route path="/profile" element={<Profile />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/course/:id" element={<CourseDetail />} />
+        <Route path="/learn/:courseId/:lectureId" element={<Learn />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/teach" element={<Teach />} />
+        <Route path="/business" element={<Business />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+      <ChatWidget />
+    </>
   )
 }
 
