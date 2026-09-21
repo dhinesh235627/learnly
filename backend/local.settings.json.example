@@ -2,6 +2,9 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "node"
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "VIDEOS_ACCOUNT_NAME": "",
+    "VIDEOS_ACCOUNT_KEY": "",
+    "VIDEOS_CONTAINER": "videos"
   }
 }

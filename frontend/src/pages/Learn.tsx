@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import AnimatedPopover from "../components/AnimatedPopover"
 import StarRating from "../components/StarRating"
 import { adjacentLecture, allLectures, courseProgress, courses, findLecture } from "../data/courses"
+import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
 import { useCourseReminder } from "../hooks/useCourseReminder"
@@ -10,6 +11,7 @@ import { useCourseReview } from "../hooks/useCourseReview"
 import { useIdSet } from "../hooks/useIdSet"
 import { useLectureNotes } from "../hooks/useLectureNotes"
 import { useLectureQuestions } from "../hooks/useLectureQuestions"
+import { API_BASE } from "../lib/api"
 
 const TABS = ["Course content", "Overview", "Q&A", "Notes", "Announcements", "Reviews", "Learning tools"] as const
 
@@ -38,6 +40,7 @@ export default function Learn() {
   const { text: noteText, setText: setNoteText } = useLectureNotes(lectureId ?? "")
   const { questions, ask } = useLectureQuestions(lectureId ?? "")
   const { reminder, permission, setReminder, clearReminder } = useCourseReminder(courseId ?? "", course?.title ?? "")
+  const { user, loading: authLoading } = useAuth()
 
   const lecture = course && lectureId ? findLecture(course, lectureId) : undefined
 
@@ -45,6 +48,35 @@ export default function Learn() {
     if (!course || !lecture) return 0
     return course.curriculum.findIndex((s) => s.lectures.some((l) => l.id === lecture.id))
   }, [course, lecture])
+
+  const [videoUrl, setVideoUrl] = useState<string | null>(null)
+  const [videoLoading, setVideoLoading] = useState(false)
+
+  useEffect(() => {
+    setVideoUrl(null)
+    if (!lecture?.hasVideo || !user) return
+
+    let cancelled = false
+    setVideoLoading(true)
+    fetch(`${API_BASE}/api/videos/${lecture.id}/url`, { credentials: "include" })
+      .then((res) => {
+        if (!res.ok) throw new Error("request failed")
+        return res.json() as Promise<{ url: string }>
+      })
+      .then((data) => {
+        if (!cancelled) setVideoUrl(data.url)
+      })
+      .catch(() => {
+        // videoUrl stays null — rendered as the "couldn't load" state
+      })
+      .finally(() => {
+        if (!cancelled) setVideoLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [lecture?.id, lecture?.hasVideo, user])
 
   if (!course || !lecture) {
     return (
@@ -241,11 +273,38 @@ export default function Learn() {
       <div className="flex-1">
         <div className="bg-black">
           <div className="relative mx-auto aspect-video w-full max-w-[1100px] bg-black">
-            {lecture.videoUrl ? (
+            {!lecture.hasVideo ? (
+              <div
+                className="flex h-full w-full flex-col items-center justify-center gap-2 text-white/70"
+                style={{ backgroundColor: course.color, opacity: 0.35 }}
+              >
+                <span className="text-[32px]">🎬</span>
+                <p className="text-[13.5px]">Video coming soon for this lecture</p>
+              </div>
+            ) : authLoading ? (
+              <div className="flex h-full w-full items-center justify-center text-[13px] text-white/60">
+                Loading…
+              </div>
+            ) : !user ? (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-[#1c1d1f] text-white/80">
+                <span className="text-[32px]">🔒</span>
+                <p className="text-[13.5px]">Log in to watch this lecture</p>
+                <Link
+                  to="/login"
+                  className="rounded-md bg-brand px-4 py-2 text-[13px] font-semibold text-white hover:bg-brand-dark"
+                >
+                  Log in
+                </Link>
+              </div>
+            ) : videoLoading ? (
+              <div className="flex h-full w-full items-center justify-center text-[13px] text-white/60">
+                Loading video…
+              </div>
+            ) : videoUrl ? (
               <>
                 <video
                   key={lecture.id}
-                  src={lecture.videoUrl}
+                  src={videoUrl}
                   controls
                   preload="metadata"
                   className="h-full w-full"
@@ -264,12 +323,9 @@ export default function Learn() {
                 )}
               </>
             ) : (
-              <div
-                className="flex h-full w-full flex-col items-center justify-center gap-2 text-white/70"
-                style={{ backgroundColor: course.color, opacity: 0.35 }}
-              >
-                <span className="text-[32px]">🎬</span>
-                <p className="text-[13.5px]">Video coming soon for this lecture</p>
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-white/70">
+                <span className="text-[32px]">⚠️</span>
+                <p className="text-[13.5px]">Couldn't load this video. Try refreshing the page.</p>
               </div>
             )}
           </div>
@@ -359,7 +415,7 @@ export default function Learn() {
                                     ✓
                                   </span>
                                   <span className="min-w-0 flex-1 truncate">{l.title}</span>
-                                  {!l.videoUrl && <span className="flex-none text-[11px] text-ink-faint">soon</span>}
+                                  {!l.hasVideo && <span className="flex-none text-[11px] text-ink-faint">soon</span>}
                                   <span className="flex-none text-ink-faint">{l.minutes}m</span>
                                 </Link>
                               )

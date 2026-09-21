@@ -131,7 +131,7 @@ export default function CourseDetail() {
                               className="flex items-center justify-between px-4 py-2.5 pl-9 text-[13.5px] text-ink-soft hover:text-ink"
                             >
                               <span className="flex items-center gap-2">
-                                <span className={lecture.videoUrl ? "text-brand" : "text-ink-faint"}>▶</span>
+                                <span className={lecture.hasVideo ? "text-brand" : "text-ink-faint"}>▶</span>
                                 {lecture.title}
                               </span>
                               <span className="text-[12px] text-ink-faint">{lecture.minutes}m</span>

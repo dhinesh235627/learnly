@@ -2,7 +2,7 @@ export type Lecture = {
   id: string
   title: string
   minutes: number
-  videoUrl?: string
+  hasVideo?: boolean
 }
 
 export type Section = {
@@ -33,14 +33,6 @@ export type Course = {
 }
 
 export const categories = ["Microsoft Azure", "AWS", "Google Cloud", "SAP"]
-
-// QA-only: videos live in a private blob container, so URLs carry a read-only
-// SAS token supplied at build time (never committed — see VITE_QA_VIDEO_SAS
-// in the deploy-frontend-qa workflow). Replace with per-request signed URLs
-// from the Video service once playback auth exists (Phase 2).
-const QA_VIDEO_BASE = "https://stlearnlyqa4127.blob.core.windows.net/videos"
-const QA_VIDEO_SAS = import.meta.env.VITE_QA_VIDEO_SAS ?? ""
-const qaVideo = (blobName: string) => `${QA_VIDEO_BASE}/${blobName}?${QA_VIDEO_SAS}`
 
 export const courses: Course[] = [
   {
@@ -80,32 +72,32 @@ export const courses: Course[] = [
       {
         title: "Getting Started",
         lectures: [
-          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 32, videoUrl: qaVideo("azb-01-intro.mp4") },
-          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 50, videoUrl: qaVideo("azb-02-cloud-fundamentals.mp4") },
-          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 31, videoUrl: qaVideo("azb-03-getting-started.mp4") },
+          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 32, hasVideo: true },
+          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 50, hasVideo: true },
+          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 31, hasVideo: true },
         ],
       },
       {
         title: "Core Azure Resources & Compute",
         lectures: [
-          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 25, videoUrl: qaVideo("azb-04-resources-rg-arm.mp4") },
-          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 44, videoUrl: qaVideo("azb-05-vms-jenkins.mp4") },
+          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 25, hasVideo: true },
+          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 44, hasVideo: true },
         ],
       },
       {
         title: "Azure Networking",
         lectures: [
-          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 19, videoUrl: qaVideo("azb-06-vnet-fundamentals.mp4") },
-          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 39, videoUrl: qaVideo("azb-07-networking-basic-advanced.mp4") },
-          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 38, videoUrl: qaVideo("azb-08-networking-project.mp4") },
-          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 34, videoUrl: qaVideo("azb-09-networking-interview.mp4") },
+          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 19, hasVideo: true },
+          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 39, hasVideo: true },
+          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 38, hasVideo: true },
+          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 34, hasVideo: true },
         ],
       },
       {
         title: "Storage & Automation",
         lectures: [
-          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 24, videoUrl: qaVideo("azb-10-storage-services.mp4") },
-          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 29, videoUrl: qaVideo("azb-11-cli-automation.mp4") },
+          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 24, hasVideo: true },
+          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 29, hasVideo: true },
         ],
       },
     ],
@@ -153,31 +145,31 @@ export const courses: Course[] = [
       {
         title: "Getting Started",
         lectures: [
-          { id: "aws-01-intro", title: "What is AWS? Amazon Cloud Services Tutorial", minutes: 9, videoUrl: qaVideo("aws-01-intro.mp4") },
+          { id: "aws-01-intro", title: "What is AWS? Amazon Cloud Services Tutorial", minutes: 9, hasVideo: true },
         ],
       },
       {
         title: "Compute & Deployment",
         lectures: [
-          { id: "aws-02-ec2-instance", title: "Create an EC2 Instance in AWS — Step by Step", minutes: 8, videoUrl: qaVideo("aws-02-ec2-instance.mp4") },
-          { id: "aws-03-ec2-s3-deploy", title: "Deploy a Spring Boot Application on AWS Using EC2 & S3", minutes: 18, videoUrl: qaVideo("aws-03-ec2-s3-deploy.mp4") },
-          { id: "aws-04-beanstalk-tomcat", title: "Deploy Spring Boot Applications with AWS Elastic Beanstalk (Tomcat)", minutes: 9, videoUrl: qaVideo("aws-04-beanstalk-tomcat.mp4") },
+          { id: "aws-02-ec2-instance", title: "Create an EC2 Instance in AWS — Step by Step", minutes: 8, hasVideo: true },
+          { id: "aws-03-ec2-s3-deploy", title: "Deploy a Spring Boot Application on AWS Using EC2 & S3", minutes: 18, hasVideo: true },
+          { id: "aws-04-beanstalk-tomcat", title: "Deploy Spring Boot Applications with AWS Elastic Beanstalk (Tomcat)", minutes: 9, hasVideo: true },
         ],
       },
       {
         title: "Databases & Storage",
         lectures: [
-          { id: "aws-05-rds-mysql", title: "Amazon RDS — Deploy a Spring Boot + MySQL CRUD App to Elastic Beanstalk", minutes: 15, videoUrl: qaVideo("aws-05-rds-mysql.mp4") },
-          { id: "aws-06-dynamodb", title: "AWS DynamoDB — Spring Boot CRUD Example on Elastic Beanstalk", minutes: 34, videoUrl: qaVideo("aws-06-dynamodb.mp4") },
-          { id: "aws-07-angular-s3", title: "Deploy an Angular Application to AWS S3", minutes: 7, videoUrl: qaVideo("aws-07-angular-s3.mp4") },
+          { id: "aws-05-rds-mysql", title: "Amazon RDS — Deploy a Spring Boot + MySQL CRUD App to Elastic Beanstalk", minutes: 15, hasVideo: true },
+          { id: "aws-06-dynamodb", title: "AWS DynamoDB — Spring Boot CRUD Example on Elastic Beanstalk", minutes: 34, hasVideo: true },
+          { id: "aws-07-angular-s3", title: "Deploy an Angular Application to AWS S3", minutes: 7, hasVideo: true },
         ],
       },
       {
         title: "Advanced Integration",
         lectures: [
-          { id: "aws-08-secrets-manager", title: "Manage Credentials Securely with AWS Secrets Manager & RDS", minutes: 27, videoUrl: qaVideo("aws-08-secrets-manager.mp4") },
-          { id: "aws-09-sqs", title: "Spring Cloud AWS — Amazon Simple Queue Service (SQS) with Spring Boot", minutes: 19, videoUrl: qaVideo("aws-09-sqs.mp4") },
-          { id: "aws-10-fullstack-beanstalk", title: "Full-Stack Deployment: Spring Boot + Angular + MySQL on AWS (Beanstalk, S3, RDS)", minutes: 21, videoUrl: qaVideo("aws-10-fullstack-beanstalk.mp4") },
+          { id: "aws-08-secrets-manager", title: "Manage Credentials Securely with AWS Secrets Manager & RDS", minutes: 27, hasVideo: true },
+          { id: "aws-09-sqs", title: "Spring Cloud AWS — Amazon Simple Queue Service (SQS) with Spring Boot", minutes: 19, hasVideo: true },
+          { id: "aws-10-fullstack-beanstalk", title: "Full-Stack Deployment: Spring Boot + Angular + MySQL on AWS (Beanstalk, S3, RDS)", minutes: 21, hasVideo: true },
         ],
       },
     ],
@@ -344,7 +336,7 @@ export function findLecture(course: Course, lectureId: string) {
 
 export function firstPlayableLecture(course: Course): Lecture {
   const flat = allLectures(course)
-  return flat.find((l) => l.videoUrl) ?? flat[0]
+  return flat.find((l) => l.hasVideo) ?? flat[0]
 }
 
 export function adjacentLecture(course: Course, lectureId: string, dir: 1 | -1) {
