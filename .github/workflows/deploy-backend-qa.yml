@@ -24,6 +24,10 @@ jobs:
       - name: Install dependencies
         run: npm install --omit=dev
 
+      # Requires WEBSITE_RUN_FROM_PACKAGE=1 on the Function App. Without it,
+      # Kudu extracts and copies every file in the zip individually, which
+      # times out on the Free plan once node_modules gets large (the Azure
+      # AI Foundry SDKs alone are 20k+ files).
       - name: Deploy to Azure Function App (QA)
         uses: Azure/functions-action@v1
         with:
