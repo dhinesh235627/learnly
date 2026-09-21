@@ -40,7 +40,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="relative -mx-5 h-[260px] overflow-hidden sm:h-[340px] md:mx-0 md:h-[420px] md:rounded-l-2xl">
+            <div className="relative -mx-5 h-[260px] overflow-hidden sm:h-[340px] md:mx-0 md:h-[420px] md:rounded-2xl">
               <img
                 src="/images/landing-hero.jpg"
                 alt="Two learners reviewing a course together on a laptop"
