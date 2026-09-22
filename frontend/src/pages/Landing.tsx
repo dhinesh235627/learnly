@@ -19,6 +19,12 @@ export default function Landing() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/50 to-brand-dark/10" />
 
+          <div className="absolute right-6 top-6 hidden rounded-2xl border border-white/40 bg-brand/30 px-6 py-3 shadow-lg backdrop-blur-md sm:right-10 sm:top-10 md:block">
+            <span className="font-script text-[38px] leading-none text-white drop-shadow-sm sm:text-[46px]">
+              Learnly
+            </span>
+          </div>
+
           <div className="relative mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-14 md:py-24">
             <div className="max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
               <p className="mb-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
