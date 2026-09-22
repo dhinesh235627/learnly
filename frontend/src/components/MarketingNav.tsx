@@ -19,7 +19,7 @@ const DUMMY_CATEGORIES = [
 export default function MarketingNav() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-5 px-5 py-3.5">
+      <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center gap-5 px-5 py-3.5">
         <Link to="/" className="flex flex-none items-center gap-2 font-display text-lg font-extrabold text-ink">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand font-display text-base font-bold text-white">
             L
@@ -88,7 +88,7 @@ export default function MarketingNav() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl items-center gap-6 overflow-x-auto px-5 py-2.5">
+        <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center gap-6 overflow-x-auto px-5 py-2.5">
           {DUMMY_CATEGORIES.map((category) => (
             <span
               key={category}

@@ -34,7 +34,7 @@ export default function Login() {
   return (
     <div className="flex min-h-svh flex-col bg-paper">
       <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+        <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center justify-between px-5 py-4">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-extrabold text-ink">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand font-display text-base font-bold text-white">
               L

@@ -57,7 +57,7 @@ export default function CourseDetail() {
               className="pointer-events-none absolute bottom-3 right-3 h-16 w-24 object-contain object-right mix-blend-multiply opacity-25 sm:h-20 sm:w-32 md:h-24 md:w-40"
             />
           )}
-          <div className="relative mx-auto max-w-6xl px-5 py-10">
+          <div className="relative mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-10">
             <p className="text-[12.5px] font-semibold uppercase tracking-wide text-white/80">
               {course.category}
             </p>
@@ -78,7 +78,7 @@ export default function CourseDetail() {
           </div>
         </section>
 
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-10 md:grid-cols-[1fr_320px]">
+        <div className="mx-auto grid max-w-7xl 2xl:max-w-[1700px] gap-10 px-5 py-10 md:grid-cols-[1fr_320px]">
           <div>
             <section className="rounded-xl border border-line bg-surface p-6">
               <h2 className="text-[18px] font-bold text-ink">What you'll learn</h2>

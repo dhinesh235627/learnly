@@ -13,7 +13,7 @@ export default function Wishlist() {
     <div className="flex min-h-svh flex-col">
       <TopNav />
       <main className="flex-1 bg-paper">
-        <div className="mx-auto max-w-6xl px-5 py-10">
+        <div className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-10">
           <h1 className="text-[22px] font-bold text-ink">Wishlist</h1>
 
           {items.length === 0 ? (

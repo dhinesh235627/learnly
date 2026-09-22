@@ -41,7 +41,7 @@ export default function Home() {
         <PromoBanner />
         <TopNav />
         <main className="flex-1 bg-paper">
-          <div className="mx-auto max-w-6xl px-5 py-8">
+          <div className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-8">
             <p className="text-[14px] text-ink-soft">
               {results.length} result{results.length === 1 ? "" : "s"} for
             </p>
@@ -77,7 +77,7 @@ export default function Home() {
         <PromoBanner />
         <TopNav />
         <main className="flex-1 bg-paper">
-          <div className="mx-auto max-w-6xl px-5 py-8">
+          <div className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-8">
             <h1 className="text-[24px] font-bold text-ink">{category} courses</h1>
             <Link to="/home" className="mt-2 inline-block text-[13.5px] font-semibold text-brand hover:underline">
               Clear filter
@@ -102,7 +102,7 @@ export default function Home() {
       <TopNav />
 
       <main className="flex-1 bg-paper">
-        <div className="mx-auto max-w-6xl px-5 py-8">
+        <div className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-8">
           <div className="hero-gradient relative overflow-hidden rounded-2xl px-5 py-5 text-white sm:px-7">
             <CloudCircuitGlyph className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rotate-[-8deg] text-white/10" />
 

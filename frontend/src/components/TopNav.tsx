@@ -37,7 +37,7 @@ export default function TopNav() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface">
-      <div className="mx-auto flex max-w-6xl items-center gap-5 px-5 py-3.5">
+      <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center gap-5 px-5 py-3.5">
         <Link to="/home" className="flex items-center gap-2 font-display text-xl font-extrabold text-ink">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand font-display text-lg font-bold text-white">
             L

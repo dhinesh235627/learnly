@@ -19,7 +19,7 @@ export default function Landing() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/50 to-brand-dark/10" />
 
-          <div className="relative mx-auto max-w-6xl px-5 py-14 md:py-24">
+          <div className="relative mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-14 md:py-24">
             <div className="max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
               <p className="mb-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
                 Cloud &amp; enterprise skills
@@ -51,7 +51,7 @@ export default function Landing() {
 
         {/* Category tiles */}
         <section className="border-b border-line bg-paper">
-          <div className="mx-auto max-w-6xl px-5 py-14">
+          <div className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-14">
             <h2 className="text-[26px] font-bold text-ink">
               Learn essential <span className="font-script text-[34px] text-brand">cloud &amp; enterprise</span>{" "}
               skills
@@ -81,7 +81,7 @@ export default function Landing() {
         </section>
 
         {/* Featured courses */}
-        <section className="mx-auto max-w-6xl px-5 py-14">
+        <section className="mx-auto max-w-7xl 2xl:max-w-[1700px] px-5 py-14">
           <div className="mb-6 flex items-end justify-between">
             <div>
               <h2 className="text-[24px] font-bold text-ink">Start with these four</h2>
@@ -105,7 +105,7 @@ export default function Landing() {
 
         {/* Why Learnly */}
         <section className="border-t border-line bg-surface">
-          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 sm:grid-cols-3">
+          <div className="mx-auto grid max-w-7xl 2xl:max-w-[1700px] gap-8 px-5 py-14 sm:grid-cols-3">
             <div>
               <p className="mb-2 text-[13px] font-bold uppercase tracking-wide text-teal">
                 Vendor-aligned
