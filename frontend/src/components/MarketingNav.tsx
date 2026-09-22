@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { categories, courses } from "../data/courses"
 
 export default function MarketingNav() {
   return (
@@ -35,6 +36,24 @@ export default function MarketingNav() {
             Sign up
           </Link>
         </nav>
+      </div>
+
+      <div className="border-t border-line">
+        <div className="mx-auto flex max-w-6xl items-center gap-6 overflow-x-auto px-5 py-2.5">
+          {categories.map((category) => {
+            const course = courses.find((c) => c.category === category)
+            if (!course) return null
+            return (
+              <Link
+                key={category}
+                to={`/course/${course.id}`}
+                className="flex-none text-[13.5px] font-semibold text-ink-soft transition hover:text-brand"
+              >
+                {category}
+              </Link>
+            )
+          })}
+        </div>
       </div>
     </header>
   )
