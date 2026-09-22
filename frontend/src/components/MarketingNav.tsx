@@ -1,5 +1,20 @@
 import { Link } from "react-router-dom"
-import { categories, courses } from "../data/courses"
+
+// Placeholder categories matching Udemy's top-level taxonomy — not wired to
+// real content yet (Learnly only has courses under a handful of these).
+// Kept as static labels so the nav can grow into them later.
+const DUMMY_CATEGORIES = [
+  "Development",
+  "Business",
+  "Finance & Accounting",
+  "IT & Software",
+  "Office Productivity",
+  "Personal Development",
+  "Design",
+  "Marketing",
+  "Health & Fitness",
+  "Music",
+]
 
 export default function MarketingNav() {
   return (
@@ -40,19 +55,15 @@ export default function MarketingNav() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-6xl items-center gap-6 overflow-x-auto px-5 py-2.5">
-          {categories.map((category) => {
-            const course = courses.find((c) => c.category === category)
-            if (!course) return null
-            return (
-              <Link
-                key={category}
-                to={`/course/${course.id}`}
-                className="flex-none text-[13.5px] font-semibold text-ink-soft transition hover:text-brand"
-              >
-                {category}
-              </Link>
-            )
-          })}
+          {DUMMY_CATEGORIES.map((category) => (
+            <span
+              key={category}
+              title="Coming soon"
+              className="flex-none cursor-default text-[13.5px] font-semibold text-ink-soft"
+            >
+              {category}
+            </span>
+          ))}
         </div>
       </div>
     </header>
