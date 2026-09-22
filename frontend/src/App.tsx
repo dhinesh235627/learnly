@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import ChatWidget from "./components/ChatWidget"
+import RequireAuth from "./components/RequireAuth"
 import Business from "./pages/Business"
 import Cart from "./pages/Cart"
 import CourseDetail from "./pages/CourseDetail"
@@ -17,14 +18,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/course/:id" element={<CourseDetail />} />
-        <Route path="/learn/:courseId/:lectureId" element={<Learn />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
+        <Route path="/course/:id" element={<RequireAuth><CourseDetail /></RequireAuth>} />
+        <Route path="/learn/:courseId/:lectureId" element={<RequireAuth><Learn /></RequireAuth>} />
+        <Route path="/wishlist" element={<RequireAuth><Wishlist /></RequireAuth>} />
+        <Route path="/cart" element={<RequireAuth><Cart /></RequireAuth>} />
         <Route path="/teach" element={<Teach />} />
         <Route path="/business" element={<Business />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
       </Routes>
       <ChatWidget />
     </>
