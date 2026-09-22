@@ -14,7 +14,7 @@ export default function Landing() {
         <section className="relative overflow-hidden bg-brand-dark">
           <img
             src="/images/landing-hero-wide.jpg"
-            alt="A laptop open to a digital skills course, on a desk with a second monitor and plants"
+            alt="A person taking notes while studying with a laptop open on the desk"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/50 to-brand-dark/10" />

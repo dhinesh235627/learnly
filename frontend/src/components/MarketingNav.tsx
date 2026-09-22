@@ -19,13 +19,22 @@ const DUMMY_CATEGORIES = [
 export default function MarketingNav() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3.5">
-        <Link to="/" className="flex items-center gap-2 font-display text-lg font-extrabold text-ink">
+      <div className="mx-auto flex max-w-6xl items-center gap-5 px-5 py-3.5">
+        <Link to="/" className="flex flex-none items-center gap-2 font-display text-lg font-extrabold text-ink">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand font-display text-base font-bold text-white">
             L
           </span>
           Learnly
         </Link>
+
+        <div className="hidden flex-none items-center gap-5 lg:flex">
+          <span title="Coming soon" className="cursor-default text-[14px] font-semibold text-ink-soft">
+            Explore
+          </span>
+          <span title="Coming soon" className="cursor-default text-[14px] font-semibold text-ink-soft">
+            Subscribe
+          </span>
+        </div>
 
         <div className="hidden flex-1 items-center gap-2 md:flex">
           <div className="relative w-full max-w-md">
@@ -37,7 +46,26 @@ export default function MarketingNav() {
           </div>
         </div>
 
-        <nav className="flex items-center gap-4">
+        <nav className="ml-auto flex flex-none items-center gap-4">
+          <Link
+            to="/business"
+            className="hidden text-[14px] font-semibold text-ink-soft hover:text-ink lg:inline"
+          >
+            Learnly Business
+          </Link>
+          <Link
+            to="/teach"
+            className="hidden text-[14px] font-semibold text-ink-soft hover:text-ink lg:inline"
+          >
+            Teach on Learnly
+          </Link>
+          <Link
+            to="/cart"
+            aria-label="Cart"
+            className="hidden h-9 w-9 items-center justify-center rounded-full text-[16px] text-ink-soft hover:bg-paper hover:text-ink sm:flex"
+          >
+            🛒
+          </Link>
           <Link
             to="/login"
             className="hidden text-[14.5px] font-semibold text-ink-soft hover:text-ink sm:inline"
@@ -50,6 +78,12 @@ export default function MarketingNav() {
           >
             Sign up
           </Link>
+          <span
+            title="Language"
+            className="hidden h-9 w-9 flex-none cursor-default items-center justify-center rounded-full border border-line text-[15px] text-ink-soft sm:flex"
+          >
+            🌐
+          </span>
         </nav>
       </div>
 
