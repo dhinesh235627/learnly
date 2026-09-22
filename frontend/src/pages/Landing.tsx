@@ -11,9 +11,16 @@ export default function Landing() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-dark">
-          <div className="mx-auto grid max-w-6xl items-center gap-0 px-5 py-10 md:grid-cols-2 md:gap-8 md:py-0">
-            <div className="relative z-10 max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
+        <section className="relative overflow-hidden bg-brand-dark">
+          <img
+            src="/images/landing-hero-wide.jpg"
+            alt="A laptop open to a digital skills course, on a desk with a second monitor and plants"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/50 to-brand-dark/10" />
+
+          <div className="relative mx-auto max-w-6xl px-5 py-14 md:py-24">
+            <div className="max-w-md rounded-2xl bg-white p-7 shadow-xl sm:p-9">
               <p className="mb-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-brand">
                 Cloud &amp; enterprise skills
               </p>
@@ -38,15 +45,6 @@ export default function Landing() {
                   Browse courses
                 </Link>
               </div>
-            </div>
-
-            <div className="relative -mx-5 h-[260px] overflow-hidden sm:h-[340px] md:mx-0 md:h-[420px] md:rounded-2xl">
-              <img
-                src="/images/landing-hero.jpg"
-                alt="Two learners reviewing a course together on a laptop"
-                className="h-full w-full object-cover object-top"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/25 to-transparent" />
             </div>
           </div>
         </section>
