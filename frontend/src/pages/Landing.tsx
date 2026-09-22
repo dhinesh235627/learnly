@@ -14,13 +14,24 @@ export default function Landing() {
         <section className="relative overflow-hidden bg-brand-dark">
           <img
             src="/images/landing-hero-wide.jpg"
-            alt="A person taking notes while studying with a laptop open on the desk"
+            alt="A professional working on a laptop at a café table"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/50 to-brand-dark/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/35 to-brand-dark/10" />
 
-          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 items-center justify-center md:flex">
-            <span className="font-script text-[80px] leading-none text-white drop-shadow-lg lg:text-[120px] xl:text-[150px]">
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            viewBox="0 0 1600 800"
+            preserveAspectRatio="xMidYMid slice"
+            aria-hidden="true"
+          >
+            <polygon points="560,-40 820,-40 260,840 0,840" fill="var(--color-brand)" fillOpacity="0.55" />
+            <polygon points="660,-40 760,-40 200,840 100,840" fill="var(--color-brand-dark)" fillOpacity="0.35" />
+            <polygon points="0,840 260,840 0,600" fill="var(--color-brand-dark)" fillOpacity="0.4" />
+          </svg>
+
+          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 items-center justify-center md:flex">
+            <span className="font-script text-[clamp(60px,9vw,170px)] leading-none text-white drop-shadow-lg">
               Learnly
             </span>
           </div>
