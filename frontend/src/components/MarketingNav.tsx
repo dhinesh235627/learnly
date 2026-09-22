@@ -88,12 +88,12 @@ export default function MarketingNav() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center gap-6 overflow-x-auto px-5 py-2.5">
+        <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center justify-start gap-8 overflow-x-auto px-5 py-3.5 2xl:justify-center">
           {DUMMY_CATEGORIES.map((category) => (
             <span
               key={category}
               title="Coming soon"
-              className="flex-none cursor-default text-[13.5px] font-semibold text-ink-soft"
+              className="flex-none cursor-default text-[17px] font-bold text-ink-soft"
             >
               {category}
             </span>
