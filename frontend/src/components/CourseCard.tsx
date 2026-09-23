@@ -1,11 +1,10 @@
 import { motion } from "motion/react"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { courseHours, courseProgress } from "../data/courses"
+import { courseProgress } from "../data/courses"
 import type { Course } from "../data/courses"
 import { useIdSet } from "../hooks/useIdSet"
 import CourseHoverPreview from "./CourseHoverPreview"
-import RatingStars from "./RatingStars"
 
 const PREVIEW_WIDTH = 288
 const ENTER_DELAY = 300
@@ -18,7 +17,6 @@ export default function CourseCard({
   course: Course
   showProgress?: boolean
 }) {
-  const discount = Math.round((1 - course.price / course.originalPrice) * 100)
   const wishlist = useIdSet("learnly:wishlist")
   const wishlisted = wishlist.has(course.id)
   const completed = useIdSet("learnly:completed")
@@ -99,12 +97,6 @@ export default function CourseCard({
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1.5" style={{ backgroundColor: course.color }} />
 
-          {course.bestseller && (
-            <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded bg-brand px-1.5 py-0.5 text-[10.5px] font-bold text-white shadow-sm">
-              ★ Bestseller
-            </span>
-          )}
-
           <motion.button
             type="button"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -143,13 +135,22 @@ export default function CourseCard({
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[13px] font-bold text-[#B45900]">{course.rating.toFixed(1)}</span>
-                <RatingStars rating={course.rating} />
-                <span className="text-[12px] text-ink-faint">({course.ratingCount.toLocaleString()})</span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {course.bestseller && (
+                  <span className="rounded bg-teal-soft px-1.5 py-0.5 text-[11px] font-bold text-teal">
+                    Bestseller
+                  </span>
+                )}
+                <span className="rounded border border-line px-1.5 py-0.5 text-[11px] font-semibold text-ink-soft">
+                  Course
+                </span>
+                <span className="flex items-center gap-1 rounded border border-line px-1.5 py-0.5 text-[11px] font-bold text-[#B45900]">
+                  <span className="text-[#F5A623]">★</span>
+                  {course.rating.toFixed(1)}
+                </span>
               </div>
               <p className="text-[12px] text-ink-faint">
-                {courseHours(course)}h total · {course.level}
+                ({course.ratingCount.toLocaleString()} ratings)
               </p>
               <div className="mt-1 flex items-baseline gap-2">
                 <span className="font-mono text-[15px] font-bold text-ink">
@@ -157,9 +158,6 @@ export default function CourseCard({
                 </span>
                 <span className="font-mono text-[12.5px] text-ink-faint line-through">
                   ₹{course.originalPrice}
-                </span>
-                <span className="text-[12px] font-semibold text-brand">
-                  {discount}% off
                 </span>
               </div>
             </>
