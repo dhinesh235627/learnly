@@ -88,7 +88,10 @@ export default function MarketingNav() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center justify-start gap-8 overflow-x-auto px-5 py-3.5 2xl:justify-center">
+        <div
+          className="mx-auto flex max-w-7xl 2xl:max-w-[1700px] items-center gap-8 overflow-x-auto px-5 py-3.5"
+          style={{ justifyContent: "safe center" }}
+        >
           {DUMMY_CATEGORIES.map((category) => (
             <span
               key={category}

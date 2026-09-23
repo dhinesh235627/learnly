@@ -13,6 +13,7 @@ export default function Carousel({ children }: { children: ReactNode }) {
       <div
         ref={trackRef}
         className="flex gap-5 overflow-x-auto scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ justifyContent: "safe center" }}
       >
         {children}
       </div>
