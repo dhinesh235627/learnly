@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import AnimatedPopover from "../components/AnimatedPopover"
 import StarRating from "../components/StarRating"
@@ -14,6 +14,16 @@ import { useLectureQuestions } from "../hooks/useLectureQuestions"
 import { API_BASE } from "../lib/api"
 
 const TABS = ["Course content", "Overview", "Q&A", "Notes", "Announcements", "Reviews", "Learning tools"] as const
+
+const LANGUAGE_LABELS: Record<string, string> = {
+  en: "English",
+  hi: "Hindi",
+  es: "Spanish",
+  ar: "Arabic",
+}
+
+// How far video/audio can drift apart before we force them back in sync.
+const SYNC_DRIFT_TOLERANCE_S = 0.3
 
 export default function Learn() {
   const { courseId, lectureId } = useParams()
@@ -55,6 +65,12 @@ export default function Learn() {
 
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
   const [videoLoading, setVideoLoading] = useState(false)
+  const [audioLang, setAudioLang] = useState("en")
+  const [audioUrl, setAudioUrl] = useState<string | null>(null)
+  const [subtitleUrls, setSubtitleUrls] = useState<Record<string, string>>({})
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioLanguages = lecture?.audioLanguages
 
   useEffect(() => {
     setVideoUrl(null)
@@ -81,6 +97,119 @@ export default function Learn() {
       cancelled = true
     }
   }, [lecture?.id, lecture?.hasVideo, user])
+
+  // Fresh lecture — clear the previous one's audio track selection entirely.
+  useEffect(() => {
+    setAudioLang("en")
+    setAudioUrl(null)
+  }, [lecture?.id])
+
+  // Fetch the signed URL for the selected dubbed audio track. Doesn't clear
+  // audioUrl first — keeps the previous language playing until the new one
+  // is ready, instead of going silent mid-switch.
+  useEffect(() => {
+    if (!audioLanguages?.length || !user || !lecture) return
+
+    let cancelled = false
+    fetch(`${API_BASE}/api/videos/${lecture.id}/url?kind=audio&lang=${audioLang}`, { credentials: "include" })
+      .then((res) => {
+        if (!res.ok) throw new Error("request failed")
+        return res.json() as Promise<{ url: string }>
+      })
+      .then((data) => {
+        if (!cancelled) setAudioUrl(data.url)
+      })
+      .catch(() => {
+        // keep whatever audio track was already loaded rather than going silent
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [lecture, audioLanguages, audioLang, user])
+
+  // Fetch signed URLs for every subtitle language up front, once per lecture —
+  // they populate <track> elements, so the browser's native CC menu needs them
+  // all available immediately rather than fetched on demand per selection.
+  useEffect(() => {
+    setSubtitleUrls({})
+    if (!audioLanguages?.length || !user || !lecture) return
+
+    let cancelled = false
+    Promise.all(
+      audioLanguages.map((code) =>
+        fetch(`${API_BASE}/api/videos/${lecture.id}/url?kind=subtitles&lang=${code}`, { credentials: "include" })
+          .then((res) => (res.ok ? (res.json() as Promise<{ url: string }>) : null))
+          .then((data) => [code, data?.url] as const)
+          .catch(() => [code, undefined] as const),
+      ),
+    ).then((entries) => {
+      if (cancelled) return
+      const urls: Record<string, string> = {}
+      for (const [code, url] of entries) {
+        if (url) urls[code] = url
+      }
+      setSubtitleUrls(urls)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [lecture, audioLanguages, user])
+
+  // Keep the separate (silent-video) audio element in sync with the video:
+  // mirror play/pause/seek/volume, and correct drift that creeps in over time.
+  useEffect(() => {
+    if (!audioLanguages?.length) return
+    const video = videoRef.current
+    const audio = audioRef.current
+    if (!video || !audio) return
+
+    audio.volume = video.volume
+    audio.muted = video.muted
+
+    function handlePlay() {
+      audio!.currentTime = video!.currentTime
+      audio!.play().catch(() => {})
+    }
+    function handlePause() {
+      audio!.pause()
+    }
+    function handleSeeked() {
+      audio!.currentTime = video!.currentTime
+    }
+    function handleVolumeChange() {
+      audio!.volume = video!.volume
+      audio!.muted = video!.muted
+    }
+    function handleTimeUpdate() {
+      if (Math.abs(video!.currentTime - audio!.currentTime) > SYNC_DRIFT_TOLERANCE_S) {
+        audio!.currentTime = video!.currentTime
+      }
+    }
+
+    video.addEventListener("play", handlePlay)
+    video.addEventListener("pause", handlePause)
+    video.addEventListener("seeked", handleSeeked)
+    video.addEventListener("volumechange", handleVolumeChange)
+    video.addEventListener("timeupdate", handleTimeUpdate)
+
+    return () => {
+      video.removeEventListener("play", handlePlay)
+      video.removeEventListener("pause", handlePause)
+      video.removeEventListener("seeked", handleSeeked)
+      video.removeEventListener("volumechange", handleVolumeChange)
+      video.removeEventListener("timeupdate", handleTimeUpdate)
+    }
+  }, [lecture?.id, audioLanguages, videoUrl])
+
+  function handleAudioReady() {
+    const video = videoRef.current
+    const audio = audioRef.current
+    if (!video || !audio) return
+    audio.currentTime = video.currentTime
+    if (!video.paused) audio.play().catch(() => {})
+  }
 
   if (!course || !lecture) {
     return (
@@ -300,7 +429,7 @@ export default function Learn() {
                   Log in
                 </Link>
               </div>
-            ) : videoLoading ? (
+            ) : videoLoading || (audioLanguages?.length && !audioUrl) ? (
               <div className="flex h-full w-full items-center justify-center text-[13px] text-white/60">
                 Loading video…
               </div>
@@ -308,22 +437,56 @@ export default function Learn() {
               <>
                 <video
                   key={lecture.id}
+                  ref={videoRef}
                   src={videoUrl}
                   controls
                   preload="metadata"
                   className="h-full w-full"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCaptionsNotice((v) => !v)}
-                  className="absolute right-3 top-3 rounded-md border border-white/30 bg-black/50 px-2 py-1 text-[11px] font-bold text-white/90 hover:bg-black/70"
+                  crossOrigin={audioLanguages?.length ? "anonymous" : undefined}
                 >
-                  CC
-                </button>
-                {showCaptionsNotice && (
-                  <div className="absolute bottom-14 left-1/2 -translate-x-1/2 rounded-md bg-black/80 px-3 py-1.5 text-[12.5px] text-white">
-                    Captions aren't available for this lecture yet.
-                  </div>
+                  {audioLanguages?.map((code) => (
+                    <track
+                      key={code}
+                      kind="subtitles"
+                      srcLang={code}
+                      label={LANGUAGE_LABELS[code] ?? code}
+                      src={subtitleUrls[code]}
+                      default={code === "en"}
+                    />
+                  ))}
+                </video>
+
+                {audioLanguages?.length ? (
+                  <>
+                    <audio ref={audioRef} src={audioUrl ?? undefined} onLoadedMetadata={handleAudioReady} />
+                    <select
+                      value={audioLang}
+                      onChange={(e) => setAudioLang(e.target.value)}
+                      aria-label="Audio language"
+                      className="absolute right-3 top-3 rounded-md border border-white/30 bg-black/50 px-2 py-1 text-[11px] font-bold text-white/90"
+                    >
+                      {audioLanguages.map((code) => (
+                        <option key={code} value={code} className="text-ink">
+                          {LANGUAGE_LABELS[code] ?? code}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setShowCaptionsNotice((v) => !v)}
+                      className="absolute right-3 top-3 rounded-md border border-white/30 bg-black/50 px-2 py-1 text-[11px] font-bold text-white/90 hover:bg-black/70"
+                    >
+                      CC
+                    </button>
+                    {showCaptionsNotice && (
+                      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 rounded-md bg-black/80 px-3 py-1.5 text-[12.5px] text-white">
+                        Captions aren't available for this lecture yet.
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             ) : (

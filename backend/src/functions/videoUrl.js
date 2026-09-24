@@ -4,6 +4,14 @@ import { readSessionCookie, verifySession } from "../lib/session.js"
 
 const LECTURE_ID_PATTERN = /^[a-z0-9-]+$/
 const SAS_TTL_MS = 30 * 60 * 1000
+const KINDS = new Set(["video", "audio", "subtitles"])
+const LANGS = new Set(["en", "hi", "es", "ar"])
+
+function blobNameFor(lectureId, kind, lang) {
+  if (kind === "audio") return `${lectureId}-audio-${lang}.m4a`
+  if (kind === "subtitles") return `${lectureId}-subtitles-${lang}.vtt`
+  return `${lectureId}.mp4`
+}
 
 function blobServiceClient() {
   const accountName = process.env.VIDEOS_ACCOUNT_NAME
@@ -31,8 +39,20 @@ app.http("videoUrl", {
       return { status: 400, jsonBody: { error: "invalid_lecture_id" } }
     }
 
+    const kind = request.query.get("kind") ?? "video"
+    if (!KINDS.has(kind)) {
+      return { status: 400, jsonBody: { error: "invalid_kind" } }
+    }
+
+    const lang = request.query.get("lang")
+    if (kind !== "video" && !LANGS.has(lang)) {
+      return { status: 400, jsonBody: { error: "invalid_lang" } }
+    }
+
     const containerName = process.env.VIDEOS_CONTAINER ?? "videos"
-    const blobClient = blobServiceClient().getContainerClient(containerName).getBlockBlobClient(`${lectureId}.mp4`)
+    const blobClient = blobServiceClient()
+      .getContainerClient(containerName)
+      .getBlockBlobClient(blobNameFor(lectureId, kind, lang))
 
     const url = await blobClient.generateSasUrl({
       permissions: BlobSASPermissions.parse("r"),

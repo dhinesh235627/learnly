@@ -3,6 +3,8 @@ export type Lecture = {
   title: string
   minutes: number
   hasVideo?: boolean
+  /** Language codes with a selectable dubbed audio track + subtitles (e.g. ["en","hi"]). The video itself has no embedded audio. */
+  audioLanguages?: string[]
 }
 
 export type Section = {
@@ -49,62 +51,34 @@ export const courses: Course[] = [
     rating: 4.8,
     ratingCount: 2145,
     description:
-      "A hands-on introduction to Microsoft Azure — cloud fundamentals, core resources, virtual machines, networking, storage, and CLI automation — built as a practical roadmap toward AZ-900 and AZ-104.",
+      "A hands-on walkthrough of building a no-code AI agent in Microsoft Foundry — from creating a project to testing your agent live in the playground.",
     about: [
-      "This course is a hands-on walkthrough of core Microsoft Azure services, built as a practical companion to the AZ-900 and AZ-104 exam objectives — not just theory, but the actual console clicks and CLI commands you'd use on the job.",
-      "You'll start with cloud computing fundamentals and Azure's global infrastructure, then move into resource groups, virtual machines (including deploying Jenkins on a VM), a full VNet architecture with firewalls, NSGs, and Bastion, and finish with storage services and CLI automation.",
-      "Every lecture is a real recorded session, not slides read aloud — expect terminal output, the Azure portal, and the occasional rough edge left in because that's how the tools actually behave.",
+      "A hands-on walkthrough of Microsoft Foundry's no-code agent builder: creating a project, building an agent, writing its instructions, and testing it live in the playground.",
+      "This course is being rebuilt from scratch — more lectures covering Azure fundamentals, resource groups, networking, and storage are on the way.",
     ],
     requirements: [
       "An active or free-tier Azure subscription (the free account covers everything used in this course)",
-      "Basic comfort with a command line — no prior cloud experience required",
-      "No prior Azure or AZ-900 knowledge assumed",
+      "No prior Azure or AI Foundry knowledge assumed",
     ],
     instructorBio:
       "Vishwaanth builds and ships this course's platform end to end, and teaches Azure the way he actually uses it day to day — resource groups, networking, and automation via the CLI.",
     whatYouLearn: [
-      "Explain core cloud computing concepts and Azure's global infrastructure",
-      "Deploy and manage Azure resources, resource groups, and virtual machines (including running Jenkins on an Azure VM)",
-      "Design Azure Virtual Networks with firewalls, NSGs, and Bastion for secure connectivity",
-      "Work with Azure Storage services (Blob, File, Table, Queue) and automate resources with the Azure CLI",
+      "Create a Microsoft Foundry project and provision its resources",
+      "Build a no-code AI agent and write its instructions",
+      "Test an agent live in the Foundry playground",
     ],
     curriculum: [
       {
         title: "Getting Started",
         lectures: [
-          { id: "azb-01-intro", title: "Course Introduction and Syllabus (AZ-900/AZ-104 Roadmap)", minutes: 32, hasVideo: true },
-          { id: "azb-02-cloud-fundamentals", title: "Fundamentals of Cloud Computing", minutes: 50, hasVideo: true },
-          { id: "azb-03-getting-started", title: "Getting Started with Microsoft Azure", minutes: 31, hasVideo: true },
+          {
+            id: "azb-01-intro",
+            title: "Build an AI Agent with Microsoft Foundry (No Code)",
+            minutes: 3,
+            hasVideo: true,
+            audioLanguages: ["en", "hi", "es", "ar"],
+          },
         ],
-      },
-      {
-        title: "Core Azure Resources & Compute",
-        lectures: [
-          { id: "azb-04-resources-rg-arm", title: "Azure Resources, Resource Groups and Resource Manager", minutes: 25, hasVideo: true },
-          { id: "azb-05-vms-jenkins", title: "Azure Virtual Machines and Deploying Jenkins on Azure VM", minutes: 44, hasVideo: true },
-        ],
-      },
-      {
-        title: "Azure Networking",
-        lectures: [
-          { id: "azb-06-vnet-fundamentals", title: "Azure Virtual Network (VNet) Fundamentals", minutes: 19, hasVideo: true },
-          { id: "azb-07-networking-basic-advanced", title: "Azure Networking Basic to Advanced", minutes: 39, hasVideo: true },
-          { id: "azb-08-networking-project", title: "Azure Networking Project - VNet, Firewall, NSG and Bastion", minutes: 38, hasVideo: true },
-          { id: "azb-09-networking-interview", title: "Azure Networking Interview Questions and Scenarios", minutes: 34, hasVideo: true },
-        ],
-      },
-      {
-        title: "Storage & Automation",
-        lectures: [
-          { id: "azb-10-storage-services", title: "Azure Storage Services - Blob, File, Table and Queue", minutes: 24, hasVideo: true },
-          { id: "azb-11-cli-automation", title: "Automating Azure Resources with Azure CLI", minutes: 29, hasVideo: true },
-        ],
-      },
-    ],
-    announcements: [
-      {
-        date: "2026-09-10",
-        text: "Welcome to Microsoft Azure Basics! If you're following the AZ-900/AZ-104 roadmap, I'd recommend working through the networking section lectures back-to-back — they build directly on each other.",
       },
     ],
   },
