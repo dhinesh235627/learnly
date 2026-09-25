@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import AnimatedPopover from "../components/AnimatedPopover"
+import LectureAssistant from "../components/LectureAssistant"
 import StarRating from "../components/StarRating"
 import { adjacentLecture, allLectures, courseProgress, courses, findLecture } from "../data/courses"
 import { useAuth } from "../hooks/useAuth"
@@ -13,7 +14,16 @@ import { useLectureNotes } from "../hooks/useLectureNotes"
 import { useLectureQuestions } from "../hooks/useLectureQuestions"
 import { API_BASE } from "../lib/api"
 
-const TABS = ["Course content", "Overview", "Q&A", "Notes", "Announcements", "Reviews", "Learning tools"] as const
+const TABS = [
+  "Course content",
+  "Overview",
+  "Q&A",
+  "Notes",
+  "Announcements",
+  "Reviews",
+  "Learning tools",
+  "Ask a Doubt",
+] as const
 
 const LANGUAGE_LABELS: Record<string, string> = {
   en: "English",
@@ -528,7 +538,7 @@ export default function Learn() {
             </p>
 
             <div className="mt-5 flex gap-5 overflow-x-auto border-b border-line">
-              {TABS.map((t) => (
+              {TABS.filter((t) => t !== "Ask a Doubt" || lecture.hasTranscript).map((t) => (
                 <button
                   key={t}
                   type="button"
@@ -810,6 +820,7 @@ export default function Learn() {
                   )}
                 </div>
               )}
+              {tab === "Ask a Doubt" && lecture.hasTranscript && <LectureAssistant lectureId={lecture.id} />}
             </div>
           </div>
         </div>

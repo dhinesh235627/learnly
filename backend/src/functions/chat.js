@@ -1,39 +1,12 @@
 import { app } from "@azure/functions"
-import { DefaultAzureCredential } from "@azure/identity"
-import { AIProjectClient } from "@azure/ai-projects"
+import { getAgentClient } from "../lib/foundryAgent.js"
+import { createRateLimiter } from "../lib/rateLimit.js"
 
 const AGENT_NAME = "LearnlySupportAgent"
 const MAX_MESSAGE_LENGTH = 1000
 const MAX_OUTPUT_TOKENS = 300
 
-// Lightweight, single-instance abuse guard for a public, unauthenticated,
-// paid-model endpoint. Not durable across restarts or multiple Function
-// instances — a proper fix (Table/Cosmos-backed) can come later; this just
-// stops a casual loop from running up model costs.
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX_REQUESTS = 10
-const requestLog = new Map()
-
-function isRateLimited(clientId) {
-  const now = Date.now()
-  const timestamps = (requestLog.get(clientId) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS)
-  timestamps.push(now)
-  requestLog.set(clientId, timestamps)
-  return timestamps.length > RATE_LIMIT_MAX_REQUESTS
-}
-
-let projectClient
-let openAIClient
-
-async function getOpenAIClient() {
-  if (!openAIClient) {
-    const endpoint = process.env.FOUNDRY_PROJECT_ENDPOINT
-    if (!endpoint) throw new Error("FOUNDRY_PROJECT_ENDPOINT is not configured")
-    projectClient = new AIProjectClient(endpoint, new DefaultAzureCredential())
-    openAIClient = projectClient.getOpenAIClient({ azureConfig: { allowPreview: true, agentName: AGENT_NAME } })
-  }
-  return openAIClient
-}
+const isRateLimited = createRateLimiter(60_000, 10)
 
 app.http("chat", {
   methods: ["POST"],
@@ -60,7 +33,7 @@ app.http("chat", {
     const conversationId = typeof body?.conversationId === "string" ? body.conversationId : undefined
 
     try {
-      const openai = await getOpenAIClient()
+      const openai = getAgentClient(AGENT_NAME)
       const conversation = conversationId ? { id: conversationId } : await openai.conversations.create()
 
       const response = await openai.responses.create({

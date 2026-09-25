@@ -5,6 +5,8 @@ export type Lecture = {
   hasVideo?: boolean
   /** Language codes with a selectable dubbed audio track + subtitles (e.g. ["en","hi"]). The video itself has no embedded audio. */
   audioLanguages?: string[]
+  /** Has a real transcript, so the in-lecture "Ask a doubt" assistant can ground answers in it. */
+  hasTranscript?: boolean
 }
 
 export type Section = {
@@ -77,6 +79,7 @@ export const courses: Course[] = [
             minutes: 3,
             hasVideo: true,
             audioLanguages: ["en", "hi", "es", "ar"],
+            hasTranscript: true,
           },
         ],
       },

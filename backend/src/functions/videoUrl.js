@@ -1,6 +1,7 @@
 import { app } from "@azure/functions"
-import { BlobSASPermissions, BlobServiceClient, StorageSharedKeyCredential } from "@azure/storage-blob"
+import { BlobSASPermissions } from "@azure/storage-blob"
 import { readSessionCookie, verifySession } from "../lib/session.js"
+import { videosContainerClient } from "../lib/videoStorage.js"
 
 const LECTURE_ID_PATTERN = /^[a-z0-9-]+$/
 const SAS_TTL_MS = 30 * 60 * 1000
@@ -11,16 +12,6 @@ function blobNameFor(lectureId, kind, lang) {
   if (kind === "audio") return `${lectureId}-audio-${lang}.m4a`
   if (kind === "subtitles") return `${lectureId}-subtitles-${lang}.vtt`
   return `${lectureId}.mp4`
-}
-
-function blobServiceClient() {
-  const accountName = process.env.VIDEOS_ACCOUNT_NAME
-  const accountKey = process.env.VIDEOS_ACCOUNT_KEY
-  if (!accountName || !accountKey) {
-    throw new Error("VIDEOS_ACCOUNT_NAME / VIDEOS_ACCOUNT_KEY are not configured")
-  }
-  const credential = new StorageSharedKeyCredential(accountName, accountKey)
-  return new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, credential)
 }
 
 app.http("videoUrl", {
@@ -49,10 +40,7 @@ app.http("videoUrl", {
       return { status: 400, jsonBody: { error: "invalid_lang" } }
     }
 
-    const containerName = process.env.VIDEOS_CONTAINER ?? "videos"
-    const blobClient = blobServiceClient()
-      .getContainerClient(containerName)
-      .getBlockBlobClient(blobNameFor(lectureId, kind, lang))
+    const blobClient = videosContainerClient().getBlockBlobClient(blobNameFor(lectureId, kind, lang))
 
     const url = await blobClient.generateSasUrl({
       permissions: BlobSASPermissions.parse("r"),
