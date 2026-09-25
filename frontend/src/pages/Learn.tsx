@@ -214,7 +214,7 @@ export default function Learn() {
       video.removeEventListener("volumechange", handleVolumeChange)
       video.removeEventListener("timeupdate", handleTimeUpdate)
     }
-  }, [lecture?.id, audioLanguages, videoUrl])
+  }, [lecture?.id, audioLanguages, videoUrl, audioUrl, subtitlesReady])
 
   function handleAudioReady() {
     const video = videoRef.current
