@@ -78,6 +78,7 @@ export default function Learn() {
   const [audioLang, setAudioLang] = useState("en")
   const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [subtitleUrls, setSubtitleUrls] = useState<Record<string, string>>({})
+  const [subtitlesReady, setSubtitlesReady] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioLanguages = lecture?.audioLanguages
@@ -143,6 +144,7 @@ export default function Learn() {
   // all available immediately rather than fetched on demand per selection.
   useEffect(() => {
     setSubtitleUrls({})
+    setSubtitlesReady(false)
     if (!audioLanguages?.length || !user || !lecture) return
 
     let cancelled = false
@@ -160,6 +162,7 @@ export default function Learn() {
         if (url) urls[code] = url
       }
       setSubtitleUrls(urls)
+      setSubtitlesReady(true)
     })
 
     return () => {
@@ -439,7 +442,7 @@ export default function Learn() {
                   Log in
                 </Link>
               </div>
-            ) : videoLoading || (audioLanguages?.length && !audioUrl) ? (
+            ) : videoLoading || (audioLanguages?.length && (!audioUrl || !subtitlesReady)) ? (
               <div className="flex h-full w-full items-center justify-center text-[13px] text-white/60">
                 Loading video…
               </div>
