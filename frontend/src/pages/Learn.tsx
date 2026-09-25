@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import AnimatedPopover from "../components/AnimatedPopover"
 import LectureAssistant from "../components/LectureAssistant"
 import StarRating from "../components/StarRating"
 import { adjacentLecture, allLectures, courseProgress, courses, findLecture } from "../data/courses"
+import { useAttentionCallout } from "../hooks/useAttentionCallout"
 import { useAuth } from "../hooks/useAuth"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useCourseRating } from "../hooks/useCourseRating"
@@ -13,6 +14,12 @@ import { useIdSet } from "../hooks/useIdSet"
 import { useLectureNotes } from "../hooks/useLectureNotes"
 import { useLectureQuestions } from "../hooks/useLectureQuestions"
 import { API_BASE } from "../lib/api"
+import type { AttentionStatus } from "../lib/attentionStatus"
+
+// Lazy: pulls in TensorFlow.js + the face/object models (a multi-MB module
+// graph) only once a video lecture actually renders this, instead of
+// bloating the single shared app bundle every page pays for.
+const AttentionMonitor = lazy(() => import("../components/AttentionMonitor"))
 
 const TABS = [
   "Course content",
@@ -79,6 +86,8 @@ export default function Learn() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [subtitleUrls, setSubtitleUrls] = useState<Record<string, string>>({})
   const [subtitlesReady, setSubtitlesReady] = useState(false)
+  const [attentionStatus, setAttentionStatus] = useState<AttentionStatus>("idle")
+  useAttentionCallout(attentionStatus, true, user?.name)
   const videoRef = useRef<HTMLVideoElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioLanguages = lecture?.audioLanguages
@@ -510,6 +519,14 @@ export default function Learn() {
             )}
           </div>
         </div>
+
+        {lecture.hasVideo && user && (
+          <div className="mx-auto w-full max-w-[1100px] px-5 pt-3">
+            <Suspense fallback={null}>
+              <AttentionMonitor onStatus={setAttentionStatus} />
+            </Suspense>
+          </div>
+        )}
 
         <div className="mx-auto w-full max-w-[1100px]">
           <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
