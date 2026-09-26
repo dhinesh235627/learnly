@@ -4,7 +4,7 @@ import { speakCallout } from "../lib/speechApi"
 
 // How long a distracted status has to hold continuously before it counts as
 // a real lapse worth calling out, not a one-off glance or a blink.
-const DISTRACTION_HOLD_MS = 8_000
+const DISTRACTION_HOLD_MS = 5_000
 // Minimum time between callouts, so the agent nudges rather than nags.
 const COOLDOWN_MS = 3 * 60_000
 
@@ -17,14 +17,22 @@ const MESSAGES: Partial<Record<AttentionStatus, (name: string) => string>> = {
 }
 
 /** Watches a stream of AttentionMonitor statuses and, once a distracted
- * state has held continuously for DISTRACTION_HOLD_MS, speaks a callout via
- * Azure TTS — at most once per continuous distracted stretch, and never
- * more often than COOLDOWN_MS apart. The specific distracted sub-reason
- * (head turned vs. eyes closed vs. phone) can change mid-stretch without
- * resetting the hold timer — only actually regaining attention does. */
-export function useAttentionCallout(status: AttentionStatus, enabled: boolean, userName: string | undefined) {
+ * state has held continuously for DISTRACTION_HOLD_MS, pauses the lecture
+ * (via onTrigger) and speaks a callout via Azure TTS — at most once per
+ * continuous distracted stretch, and never more often than COOLDOWN_MS
+ * apart. The specific distracted sub-reason (head turned vs. eyes closed
+ * vs. phone) can change mid-stretch without resetting the hold timer —
+ * only actually regaining attention does. */
+export function useAttentionCallout(
+  status: AttentionStatus,
+  enabled: boolean,
+  userName: string | undefined,
+  onTrigger?: () => void,
+) {
   const latestStatusRef = useRef<AttentionStatus>(status)
   const lastCalloutAtRef = useRef(0)
+  const onTriggerRef = useRef(onTrigger)
+  onTriggerRef.current = onTrigger
   const isDistracted = enabled && DISTRACTED_STATUSES.has(status)
 
   useEffect(() => {
@@ -42,6 +50,7 @@ export function useAttentionCallout(status: AttentionStatus, enabled: boolean, u
       if (!DISTRACTED_STATUSES.has(finalStatus)) return
 
       lastCalloutAtRef.current = Date.now()
+      onTriggerRef.current?.()
       const buildMessage = MESSAGES[finalStatus] ?? MESSAGES["looking-away"]!
       const name = userName?.trim().split(/\s+/)[0] || "there"
       speakCallout(buildMessage(name)).catch(() => {

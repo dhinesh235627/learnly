@@ -87,8 +87,8 @@ export default function Learn() {
   const [subtitleUrls, setSubtitleUrls] = useState<Record<string, string>>({})
   const [subtitlesReady, setSubtitlesReady] = useState(false)
   const [attentionStatus, setAttentionStatus] = useState<AttentionStatus>("idle")
-  useAttentionCallout(attentionStatus, true, user?.name)
   const videoRef = useRef<HTMLVideoElement>(null)
+  useAttentionCallout(attentionStatus, true, user?.name, () => videoRef.current?.pause())
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioLanguages = lecture?.audioLanguages
 
