@@ -13,7 +13,6 @@ export type AttentionStatus =
   | "looking-away"
   | "gaze-away"
   | "eyes-closed"
-  | "object-detected"
   | "error"
 
 // Statuses that count as "not paying attention" for the caller's own
@@ -23,5 +22,4 @@ export const DISTRACTED_STATUSES: ReadonlySet<AttentionStatus> = new Set([
   "looking-away",
   "gaze-away",
   "eyes-closed",
-  "object-detected",
 ])

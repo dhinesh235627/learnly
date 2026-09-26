@@ -1,4 +1,3 @@
-import * as cocoSsd from "@tensorflow-models/coco-ssd"
 import * as tf from "@tensorflow/tfjs"
 import { useEffect, useRef, useState } from "react"
 // Vendored (see src/vendor/human.esm-nobundle.js) instead of imported from
@@ -7,14 +6,7 @@ import { useEffect, useRef, useState } from "react"
 // second internal copy, sidestepping a package.json "exports" bug in the
 // published package that makes the nobundle build otherwise unresolvable.
 import Human from "../vendor/human.esm-nobundle.js"
-import {
-  areEyesClosed,
-  DISTRACTING_OBJECT_CLASSES,
-  getEyeAspectRatio,
-  getGazeOffset,
-  hasDrifted,
-  objectConfidenceThreshold,
-} from "../lib/attention"
+import { areEyesClosed, getEyeAspectRatio, getGazeOffset, hasDrifted } from "../lib/attention"
 import type { AttentionStatus } from "../lib/attentionStatus"
 
 const humanConfig = {
@@ -48,7 +40,6 @@ const STATUS_TEXT: Record<AttentionStatus, string> = {
   "looking-away": "Head turned away",
   "gaze-away": "Eyes looking away",
   "eyes-closed": "Eyes closed",
-  "object-detected": "Phone/book detected",
   error: "Camera or model error",
 }
 
@@ -66,11 +57,18 @@ function smoothed(history: number[], value: number, window: number): number {
   return history.reduce((a, b) => a + b, 0) / history.length
 }
 
-export default function AttentionMonitor({ onStatus }: { onStatus?: (status: AttentionStatus) => void }) {
+export default function AttentionMonitor({
+  onStatus,
+  voiceEnabled = true,
+  onVoiceEnabledChange,
+}: {
+  onStatus?: (status: AttentionStatus) => void
+  voiceEnabled?: boolean
+  onVoiceEnabledChange?: (enabled: boolean) => void
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const loopActiveRef = useRef(false)
-  const objectModelRef = useRef<cocoSsd.ObjectDetection | null>(null)
   const humanRef = useRef<InstanceType<typeof Human> | null>(null)
   const startingRef = useRef(false)
   const cancelStartRef = useRef(false)
@@ -112,10 +110,6 @@ export default function AttentionMonitor({ onStatus }: { onStatus?: (status: Att
     await humanRef.current.load()
     if (cancelStartRef.current) return false
     await humanRef.current.warmup()
-    if (cancelStartRef.current) return false
-    if (!objectModelRef.current) {
-      objectModelRef.current = await cocoSsd.load({ base: "lite_mobilenet_v2" })
-    }
     return !cancelStartRef.current
   }
 
@@ -235,20 +229,9 @@ export default function AttentionMonitor({ onStatus }: { onStatus?: (status: Att
     const result = humanRef.current ? await humanRef.current.detect(video) : null
     const faces = result?.face ?? []
 
-    let objectHit: string | null = null
-    let personPresent = false
-    if (objectModelRef.current) {
-      const predictions = await objectModelRef.current.detect(video)
-      personPresent = predictions.some((p) => p.class === "person" && p.score > 0.5)
-      const hits = predictions.filter(
-        (p) => DISTRACTING_OBJECT_CLASSES.has(p.class) && p.score > objectConfidenceThreshold(p.class),
-      )
-      if (hits.length > 0) objectHit = hits[0].class
-    }
-
     if (faces.length === 0) {
       resetTracking()
-      commitStatus(personPresent ? "looking-away" : "no-face")
+      commitStatus("no-face")
     } else if (faces.length > 1) {
       resetTracking()
       commitStatus("multiple-faces")
@@ -309,15 +292,13 @@ export default function AttentionMonitor({ onStatus }: { onStatus?: (status: Att
       commitBoolean(gazeAwayWindowRef, gazeAway)
       commitBoolean(eyesClosedWindowRef, eyesClosed)
 
-      const rawStatus: AttentionStatus = objectHit
-        ? "object-detected"
-        : headAway
-          ? "looking-away"
-          : eyesClosed
-            ? "eyes-closed"
-            : gazeAway
-              ? "gaze-away"
-              : "engaged"
+      const rawStatus: AttentionStatus = headAway
+        ? "looking-away"
+        : eyesClosed
+          ? "eyes-closed"
+          : gazeAway
+            ? "gaze-away"
+            : "engaged"
       commitStatus(rawStatus)
     }
   }
@@ -342,6 +323,18 @@ export default function AttentionMonitor({ onStatus }: { onStatus?: (status: Att
         </p>
         {errorMessage && <p className="truncate text-[11px] text-red-600">{errorMessage}</p>}
       </div>
+
+      {onVoiceEnabledChange && (
+        <button
+          type="button"
+          onClick={() => onVoiceEnabledChange(!voiceEnabled)}
+          title={voiceEnabled ? "Voice nudges on — click to mute" : "Voice nudges muted — click to unmute"}
+          aria-label={voiceEnabled ? "Mute voice nudges" : "Unmute voice nudges"}
+          className="flex-none rounded-md border border-line px-2.5 py-1.5 text-[13px] text-ink hover:bg-surface"
+        >
+          {voiceEnabled ? "🔊" : "🔇"}
+        </button>
+      )}
 
       <button
         type="button"

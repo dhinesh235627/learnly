@@ -101,19 +101,3 @@ export function getGazeOffset(mesh: readonly MeshPoint[]): number {
   const dy = (a.dy + b.dy) / 2
   return Math.sqrt(dx * dx + dy * dy)
 }
-
-// Narrowed from ["cell phone", "laptop", "book", "tv"] — a held phone was
-// sometimes misread as "laptop" by coco-ssd (a real, known confusion for
-// this lightweight model at certain angles), and since laptop was tracked,
-// that misread got flagged. Only phone/book are actually wanted now.
-export const DISTRACTING_OBJECT_CLASSES = new Set(["cell phone", "book"])
-
-// coco-ssd's confidence for its correct class drops when an object is small,
-// angled, or partially out of frame — lowering the global cutoff to catch
-// those real cases also let a computer mouse (similar size/rectangular
-// shape) get misread as "cell phone" at low confidence. "cell phone" gets
-// its own higher bar; laptop/book/tv aren't reported as confused with
-// anything else, so they keep the lower, more forgiving cutoff.
-export function objectConfidenceThreshold(className: string): number {
-  return className === "cell phone" ? 0.55 : 0.35
-}

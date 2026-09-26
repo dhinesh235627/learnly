@@ -87,8 +87,19 @@ export default function Learn() {
   const [subtitleUrls, setSubtitleUrls] = useState<Record<string, string>>({})
   const [subtitlesReady, setSubtitlesReady] = useState(false)
   const [attentionStatus, setAttentionStatus] = useState<AttentionStatus>("idle")
+  const [voiceEnabled, setVoiceEnabled] = useState(true)
+  const [distractionBanner, setDistractionBanner] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-  useAttentionCallout(attentionStatus, true, user?.name, () => videoRef.current?.pause())
+  useAttentionCallout(
+    attentionStatus,
+    true,
+    user?.name,
+    () => {
+      videoRef.current?.pause()
+      setDistractionBanner(true)
+    },
+    voiceEnabled,
+  )
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioLanguages = lecture?.audioLanguages
 
@@ -122,6 +133,7 @@ export default function Learn() {
   useEffect(() => {
     setAudioLang("en")
     setAudioUrl(null)
+    setDistractionBanner(false)
   }, [lecture?.id])
 
   // Fetch the signed URL for the selected dubbed audio track. Doesn't clear
@@ -465,6 +477,7 @@ export default function Learn() {
                   preload="metadata"
                   className="h-full w-full"
                   crossOrigin={audioLanguages?.length ? "anonymous" : undefined}
+                  onPlay={() => setDistractionBanner(false)}
                 >
                   {audioLanguages?.map((code) => (
                     <track
@@ -510,6 +523,22 @@ export default function Learn() {
                     )}
                   </>
                 )}
+
+                {distractionBanner && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/70 text-center">
+                    <p className="text-[15px] font-semibold text-white">You seemed distracted — lecture paused</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDistractionBanner(false)
+                        videoRef.current?.play()
+                      }}
+                      className="rounded-md bg-brand px-4 py-2 text-[13px] font-semibold text-white hover:bg-brand-dark"
+                    >
+                      Resume
+                    </button>
+                  </div>
+                )}
               </>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-white/70">
@@ -523,7 +552,11 @@ export default function Learn() {
         {lecture.hasVideo && user && (
           <div className="mx-auto w-full max-w-[1100px] px-5 pt-3">
             <Suspense fallback={null}>
-              <AttentionMonitor onStatus={setAttentionStatus} />
+              <AttentionMonitor
+                onStatus={setAttentionStatus}
+                voiceEnabled={voiceEnabled}
+                onVoiceEnabledChange={setVoiceEnabled}
+              />
             </Suspense>
           </div>
         )}

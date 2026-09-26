@@ -12,27 +12,31 @@ const MESSAGES: Partial<Record<AttentionStatus, (name: string) => string>> = {
   "looking-away": (name) => `Hey ${name}, you seem distracted. It's better to take a short break and come back.`,
   "gaze-away": (name) => `Hey ${name}, your eyes have wandered off the lecture. Take a short break and come back.`,
   "eyes-closed": (name) => `Hey ${name}, looks like you're dozing off. A quick break might help.`,
-  "no-face": (name) => `Hey ${name}, I can't see you anymore. Come back when you're ready to continue.`,
-  "object-detected": (name) => `Hey ${name}, try putting your phone away so you can focus on the lecture.`,
 }
 
 /** Watches a stream of AttentionMonitor statuses and, once a distracted
  * state has held continuously for DISTRACTION_HOLD_MS, pauses the lecture
- * (via onTrigger) and speaks a callout via Azure TTS — at most once per
- * continuous distracted stretch, and never more often than COOLDOWN_MS
- * apart. The specific distracted sub-reason (head turned vs. eyes closed
- * vs. phone) can change mid-stretch without resetting the hold timer —
+ * (via onTrigger) — always, regardless of voice — and then, unless muted,
+ * speaks a callout via Azure TTS. "no-face" never speaks: if you've
+ * stepped away there's no one to hear it, so it only pauses silently.
+ * Voice is further capped to once per COOLDOWN_MS; the pause itself isn't,
+ * but naturally can't repeat until you're briefly "engaged" again (see
+ * isDistracted below). The specific distracted sub-reason (head turned vs.
+ * eyes closed) can change mid-stretch without resetting the hold timer —
  * only actually regaining attention does. */
 export function useAttentionCallout(
   status: AttentionStatus,
   enabled: boolean,
   userName: string | undefined,
   onTrigger?: () => void,
+  voiceEnabled = true,
 ) {
   const latestStatusRef = useRef<AttentionStatus>(status)
   const lastCalloutAtRef = useRef(0)
   const onTriggerRef = useRef(onTrigger)
   onTriggerRef.current = onTrigger
+  const voiceEnabledRef = useRef(voiceEnabled)
+  voiceEnabledRef.current = voiceEnabled
   const isDistracted = enabled && DISTRACTED_STATUSES.has(status)
 
   useEffect(() => {
@@ -43,15 +47,18 @@ export function useAttentionCallout(
     if (!isDistracted) return
 
     const timer = setTimeout(() => {
-      const sinceLastCallout = Date.now() - lastCalloutAtRef.current
-      if (sinceLastCallout < COOLDOWN_MS) return
-
       const finalStatus = latestStatusRef.current
       if (!DISTRACTED_STATUSES.has(finalStatus)) return
 
-      lastCalloutAtRef.current = Date.now()
       onTriggerRef.current?.()
-      const buildMessage = MESSAGES[finalStatus] ?? MESSAGES["looking-away"]!
+
+      const buildMessage = MESSAGES[finalStatus]
+      if (!voiceEnabledRef.current || !buildMessage) return
+
+      const sinceLastCallout = Date.now() - lastCalloutAtRef.current
+      if (sinceLastCallout < COOLDOWN_MS) return
+      lastCalloutAtRef.current = Date.now()
+
       const name = userName?.trim().split(/\s+/)[0] || "there"
       speakCallout(buildMessage(name)).catch(() => {
         // best-effort: a failed callout shouldn't disrupt the lecture
